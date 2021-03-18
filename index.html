@@ -23,8 +23,6 @@ Line to send:
 <br>
 <div id="serialResults" style="font-family: monospace; white-space: pre; height:90%; width:95%;border-style: solid; overflow: scroll;"></div>
 
-
-
 <script>
     var port, textEncoder, writableStreamClosed, writer;
 
@@ -49,13 +47,10 @@ Line to send:
         }
     }
 
-
     async function sendSerialLine() {
         await writer.write(document.getElementById("lineToSend").value + "\r\n");
         //await writer.releaseLock();
     }
-
-
 
     async function listenToPort() {
         const textDecoder = new TextDecoderStream();
@@ -75,8 +70,5 @@ Line to send:
             console.log(value);
         }
     }
-
-
-
-
 </script>
+<br> © 2021 Mike Molinari (mmiscool) Source <a href="https://github.com/mmiscool/serialTerminal.com">https://github.com/mmiscool/serialTerminal.com</a>

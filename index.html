@@ -1,0 +1,82 @@
+<button onclick="connectSerial()">Connect</button>
+Baud:
+<select id='baud'>
+  <option value="110">110</option>
+  <option value="300">300</option>
+  <option value="600">600</option>
+  <option value="1200">1200</option>
+  <option value="2400">2400</option>
+  <option value="4800">4800</option>
+  <option value="9600">9600</option>
+  <option value="14400">14400</option>
+  <option value="19200">19200</option>
+  <option value="38400">38400</option>
+  <option value="57600">57600</option>
+  <option value="115200">115200</option>
+  <option value="128000">128000</option>
+  <option value="256000">256000</option>
+</select>
+<br>
+Line to send: 
+<input id="lineToSend">
+<button onclick="sendSerialLine()">Send</button>
+<br>
+<div id="serialResults" style="font-family: monospace; white-space: pre; height:90%; width:95%;border-style: solid; overflow: scroll;"></div>
+
+
+
+<script>
+    var port, textEncoder, writableStreamClosed, writer;
+
+    async function connectSerial() {
+        if ("serial" in navigator) {
+            // The Serial API is supported.
+            // Prompt user to select any serial port.
+            port = await navigator.serial.requestPort();
+            await port.open({ baudRate: document.getElementById("baud").value });
+            listenToPort();
+
+
+            textEncoder = new TextEncoderStream();
+            writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
+
+            writer = textEncoder.writable.getWriter();
+
+
+            //const ports = await navigator.serial.getPorts();
+        }else{
+        	alert("Serial Connection Failed")
+        }
+    }
+
+
+    async function sendSerialLine() {
+        await writer.write(document.getElementById("lineToSend").value + "\r\n");
+        //await writer.releaseLock();
+    }
+
+
+
+    async function listenToPort() {
+        const textDecoder = new TextDecoderStream();
+        const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
+        const reader = textDecoder.readable.getReader();
+
+        // Listen to data coming from the serial device.
+        while (true) {
+            const { value, done } = await reader.read();
+            if (done) {
+                // Allow the serial port to be closed later.
+                reader.releaseLock();
+                break;
+            }
+            // value is a string.
+            document.getElementById("serialResults").innerHTML = value + "\r\n" + document.getElementById("serialResults").innerHTML; 
+            console.log(value);
+        }
+    }
+
+
+
+
+</script>

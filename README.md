@@ -7,8 +7,5 @@ The index.html file contains a bare bones serial terminal with fewer than 100 li
 
 A live version of the serial terminal can be accesed at (https://www.serialterminal.com). Feel free to use it at your pleasure. 
 
-
-Code here:
-　```javascript:index.html
-　
-　```
+Full source here:
+[Source](index.html)

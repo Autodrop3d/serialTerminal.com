@@ -1,9 +1,7 @@
-
 ![cereal_terminal](https://user-images.githubusercontent.com/6439772/111710838-dd6a6300-8820-11eb-9083-88e0c25d104e.png)
 # Serial-Terminal.com
 See Video https://www.youtube.com/watch?v=8577GPmvuUQ
-![Untitled presentation](https://user-images.githubusercontent.com/6439772/111708198-ca08c900-881b-11eb-89d6-a533c1c7156a.png)
-
+![final_60541f2f1fafbe0034b26f70_139554](https://user-images.githubusercontent.com/6439772/111729189-e66d2b80-8844-11eb-9b7b-94de67df4338.gif)
 
 A browser based serial terminal. No plugins. Vanilla javascript. 
 

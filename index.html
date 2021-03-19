@@ -6,11 +6,11 @@
     }
 
     button,
-    select {
+    datalist {
         background-color: rgb(85, 85, 85);
     }
 
-    input {
+    input[type=text] {
         color: rgb(179, 255, 179);
         background-color: rgb(102, 86, 86);
         border: 1px solid;
@@ -18,10 +18,10 @@
         width: 300px;
     }
 
-    div {
+    #serialResults {
         font-family: monospace;
         white-space: pre;
-        height: calc(100% - 75px);
+        height: calc(100% - 80px);
         width: calc(100% - 20px);
         border-style: solid;
         overflow: scroll;
@@ -33,7 +33,9 @@
  A serial terminal that runs with out any plugins in chrome.">
 <button onclick="connectSerial()">Connect</button>
 Baud:
-<select id='baud'>
+<input type="text" id="baud" list="baudList" style="width: 10ch;" onclick="this.value = ''"
+    onchange="localStorage.baud = this.value">
+<datalist id="baudList">
     <option value="110">110</option>
     <option value="300">300</option>
     <option value="600">600</option>
@@ -48,11 +50,22 @@ Baud:
     <option value="115200">115200</option>
     <option value="128000">128000</option>
     <option value="256000">256000</option>
-</select>
+</datalist>
+<button onclick="serialResultsDiv.innerHTML = '';">Clear</button>
+
 <br>
 Line to send:
-<input id="lineToSend">
+<input type="text" id="lineToSend">
 <button onclick="sendSerialLine()">Send</button>
+
+
+<input type="checkbox" id="addLine" onclick="localStorage.addLine = this.checked;" checked>
+<label for="addLine">send with /r/n</label>
+
+<input type="checkbox" id="echoOn" onclick="localStorage.echoOn = this.checked;" checked>
+<label for="echoOn">echo</label>
+
+
 <br>
 <div id="serialResults">
 </div>
@@ -61,25 +74,26 @@ Line to send:
     var port, textEncoder, writableStreamClosed, writer;
 
     async function connectSerial() {
-        localStorage.setItem("baud", document.getElementById("baud").value)
-        if ("serial" in navigator) {
-            // The Serial API is supported.
+        try {
             // Prompt user to select any serial port.
             port = await navigator.serial.requestPort();
-            await port.open({ baudRate: localStorage.getItem("baud") });
+            await port.open({ baudRate: localStorage.baud });
             listenToPort();
 
             textEncoder = new TextEncoderStream();
             writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
 
             writer = textEncoder.writable.getWriter();
-        } else {
-            alert("Serial Connection Failed")
+        } catch {
+            alert("Serial Connection Failed");
         }
     }
 
     async function sendSerialLine() {
-        await writer.write(document.getElementById("lineToSend").value + "\r\n");
+        dataToSend = document.getElementById("lineToSend").value
+        if (document.getElementById("addLine").checked == true) dataToSend += + "\r\n";
+        if (document.getElementById("echoOn").checked == true) appendToTerminal("> " + dataToSend);
+        await writer.write(dataToSend);
         document.getElementById("lineToSend").value = "";
         //await writer.releaseLock();
     }
@@ -98,11 +112,17 @@ Line to send:
                 break;
             }
             // value is a string.
-            document.getElementById("serialResults").innerHTML = value + document.getElementById("serialResults").innerHTML;
-            //console.log(value);
+            appendToTerminal(value);
         }
     }
 
+    const serialResultsDiv = document.getElementById("serialResults");
+
+    async function appendToTerminal(newStuff) {
+        serialResultsDiv.innerHTML = serialResultsDiv.innerHTML + newStuff;
+        //scroll down to bottom of div
+        serialResultsDiv.scrollTop = serialResultsDiv.scrollHeight;
+    }
 
     document.getElementById("lineToSend").addEventListener("keyup", async function (event) {
         if (event.keyCode === 13) {
@@ -110,6 +130,10 @@ Line to send:
         }
     })
 
-    document.getElementById("baud").value = localStorage.getItem("baud");
+    document.getElementById("baud").value = (localStorage.baud == undefined ? 9600 : localStorage.baud);
+    document.getElementById("addLine").checked = (localStorage.addLine == "false" ? false : true);
+    document.getElementById("echoOn").checked = (localStorage.echoOn == "false" ? false : true);
+
 </script>
-<br> © 2021 Mike Molinari (mmiscool) Source <a href="https://github.com/mmiscool/serialTerminal.com">https://github.com/mmiscool/serialTerminal.com</a>
+<br> © 2021 Mike Molinari (mmiscool) Source <a
+    href="https://github.com/mmiscool/serialTerminal.com">https://github.com/mmiscool/serialTerminal.com</a>

@@ -21,7 +21,7 @@
     #serialResults {
         font-family: monospace;
         white-space: pre;
-        height: calc(100% - 80px);
+        height: calc(100% - 100px);
         width: calc(100% - 20px);
         border-style: solid;
         overflow: scroll;
@@ -56,8 +56,8 @@ Baud:
 
 <br>
 Line to send:
-<input type="text" id="lineToSend">
-<button onclick="sendSerialLine()">Send</button>
+<input type="text" id="lineToSend" style="width:calc(100% - 50px)">
+<button onclick="sendSerialLine()" style="width:45px">Send</button>
 
 
 <input type="checkbox" id="addLine" onclick="localStorage.addLine = this.checked;" checked>

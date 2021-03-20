@@ -93,9 +93,11 @@ Baud:
     }
 
     async function sendSerialLine() {
-        dataToSend = document.getElementById("lineToSend").value
-        if (document.getElementById("addLine").checked == true) dataToSend += + "\r\n";
+        dataToSend = document.getElementById("lineToSend").value;
+        console.log(dataToSend);
+        if (document.getElementById("addLine").checked == true) dataToSend = dataToSend + "\r\n";
         if (document.getElementById("echoOn").checked == true) appendToTerminal("> " + dataToSend);
+        console.log(dataToSend);
         await writer.write(dataToSend);
         document.getElementById("lineToSend").value = "";
         //await writer.releaseLock();

@@ -3,14 +3,9 @@
         background-color: #352e2e;
         font-family: monospace;
         color: rgb(60, 255, 1);
-        padding:0px;
+        padding: 0px;
     }
 
-body {
-  max-height: 100vh;
-  padding: 0;
-}   
-   
     button,
     datalist {
         background-color: rgb(85, 85, 85);
@@ -21,23 +16,25 @@ body {
         background-color: rgb(102, 86, 86);
         border: 1px solid;
         border-color: #696 #363 #363 #696;
-        width: 300px;
     }
 
     #serialResults {
         font-family: monospace;
         white-space: pre;
-        height: calc(100% - 80px);
+        height: calc(100% - 120px);
         width: calc(100% - 20px);
         border-style: solid;
         overflow: scroll;
         background-color: rgb(88, 92, 92);
+        padding: 10px;
+        margin: 0px;
     }
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fastest Serial terminal in your browser for Chrome.</title>
 <meta name="Description" content="Set your baud speed and hit connect.
  A serial terminal that runs with out any plugins in chrome.">
+
 <button onclick="connectSerial()">Connect</button>
 Baud:
 <input type="text" id="baud" list="baudList" style="width: 10ch;" onclick="this.value = ''"

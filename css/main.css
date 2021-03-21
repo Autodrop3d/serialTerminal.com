@@ -1,0 +1,46 @@
+* {
+    background-color: #352e2e;
+    font-family: monospace;
+    color: rgb(60, 255, 1);
+    padding: 0px;
+}
+html,body{
+    height: 100%;
+}
+
+button,
+datalist {
+    background-color: rgb(85, 85, 85);
+}
+
+input[type=text] {
+    color: rgb(179, 255, 179);
+    background-color: rgb(102, 86, 86);
+    border: 1px solid;
+    border-color: #696 #363 #363 #696;
+}
+
+#serialResults {
+    font-family: monospace;
+    white-space: pre;
+    height: calc(100% - 120px);
+    width: calc(100% - 20px);
+    border-style: solid;
+    overflow: auto;
+    background-color: rgb(88, 92, 92);
+    padding: 10px;
+    margin: 0px;
+}
+
+#baud{
+    width: 10ch;
+}
+
+#lineToSend{
+    width:calc(100% - 70px);
+    padding: 5px;
+}
+
+#sendButton{
+    width:45px
+}

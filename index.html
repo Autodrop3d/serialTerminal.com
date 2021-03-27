@@ -81,7 +81,7 @@ Baud:
         try {
             // Prompt user to select any serial port.
             port = await navigator.serial.requestPort();
-            await port.open({ baudRate: localStorage.baud == undefined ? 9600 : localStorage.baud });
+            await port.open({ baudRate: document.getElementById("baud").value });
             listenToPort();
 
             textEncoder = new TextEncoderStream();

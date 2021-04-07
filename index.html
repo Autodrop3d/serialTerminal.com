@@ -99,10 +99,8 @@ Baud:
    
     async function sendSerialLine() {
         dataToSend = document.getElementById("lineToSend").value;
-        console.log(dataToSend);
         if (document.getElementById("addLine").checked == true) dataToSend = dataToSend + "\r\n";
         if (document.getElementById("echoOn").checked == true) appendToTerminal("> " + dataToSend);
-        console.log(dataToSend);
         await writer.write(dataToSend);
         document.getElementById("lineToSend").value = "";
         //await writer.releaseLock();
@@ -129,7 +127,9 @@ Baud:
     const serialResultsDiv = document.getElementById("serialResults");
 
     async function appendToTerminal(newStuff) {
-        serialResultsDiv.innerHTML = serialResultsDiv.innerHTML + newStuff;
+        serialResultsDiv.innerHTML += newStuff;
+        if (serialResultsDiv.innerHTML.length > 3000) serialResultsDiv.innerHTML = serialResultsDiv.innerHTML.slice(serialResultsDiv.innerHTML.length - 3000);
+
         //scroll down to bottom of div
         serialResultsDiv.scrollTop = serialResultsDiv.scrollHeight;
     }

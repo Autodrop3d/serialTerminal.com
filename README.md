@@ -24,3 +24,6 @@ Instructions for use:
 Full source here:
 [Source](index.html)
 
+Known to work in chrome, chromium and edge browsers.
+Will not work in firefox or brave. See this issue for details
+https://github.com/mmiscool/serialTerminal.com/issues/1

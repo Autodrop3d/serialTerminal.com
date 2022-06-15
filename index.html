@@ -63,8 +63,11 @@ Baud:
 <button onclick="sendCharacterNumber()" style="width:100px">Send Char</button>
 <br>
 
+<input type="checkbox" id="carriageReturn" onclick="localStorage.carriageReturn = this.checked;" checked>
+<label for="carriageReturn">send with /r</label>
+
 <input type="checkbox" id="addLine" onclick="localStorage.addLine = this.checked;" checked>
-<label for="addLine">send with /r/n</label>
+<label for="addLine">send with /n</label>
 
 <input type="checkbox" id="echoOn" onclick="localStorage.echoOn = this.checked;" checked>
 <label for="echoOn">echo</label>
@@ -102,7 +105,8 @@ Baud:
         dataToSend = document.getElementById("lineToSend").value;
         lineHistory.unshift(dataToSend);
         historyIndex = -1; // No history entry selected
-        if (document.getElementById("addLine").checked == true) dataToSend = dataToSend + "\r\n";
+        if (document.getElementById("carriageReturn").checked == true) dataToSend = dataToSend + "\r";
+        if (document.getElementById("addLine").checked == true) dataToSend = dataToSend + "\n";
         if (document.getElementById("echoOn").checked == true) appendToTerminal("> " + dataToSend);
         await writer.write(dataToSend);
         document.getElementById("lineToSend").value = "";
@@ -159,6 +163,7 @@ Baud:
 
     document.getElementById("baud").value = (localStorage.baud == undefined ? 9600 : localStorage.baud);
     document.getElementById("addLine").checked = (localStorage.addLine == "false" ? false : true);
+    document.getElementById("carriageReturn").checked = (localStorage.carriageReturn == "false" ? false : true);
     document.getElementById("echoOn").checked = (localStorage.echoOn == "false" ? false : true);
 
 </script>

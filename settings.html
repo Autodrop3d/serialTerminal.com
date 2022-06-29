@@ -1,0 +1,132 @@
+<style>
+    * {
+        background-color: #352e2e;
+        font-family: monospace;
+        color: rgb(60, 255, 1);
+        padding: 0px;
+    }
+
+    button {
+        background-color: rgb(85, 85, 85);
+    }
+
+    input[type=text] {
+        color: rgb(179, 255, 179);
+        background-color: #665656;
+        border: 1px solid;
+        border-color: #696 #363 #363 #696;
+    }
+
+    [type="checkbox"] {
+        vertical-align: middle;
+    }
+
+    .settings-pane {
+        box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+        transition: 0.3s;
+        border-radius: 8px;
+        border: 1px solid;
+        border-color: #696 #363 #363 #696;
+    }
+
+    .settings-pane:hover {
+        box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+    }
+
+    .container {
+        padding: 2px 16px 16px;
+    }
+
+    .info-note {
+        border-left: 6px solid #5053f6;
+    }
+
+    .info-note>p {
+        font-weight: bold;
+        margin-top: 0px;
+        margin-bottom: 0px;
+        margin-left: 4px;
+        margin-right: 0px;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        padding-left: 10px;
+        padding-right: 0px;
+    }
+
+    .info-note>p {
+        font-weight: bold;
+        margin-top: 0px;
+        margin-bottom: 4px;
+        margin-right: 0px;
+        padding-top: 0px;
+        padding-bottom: 10px;
+        padding-right: 0px;
+    }
+
+    .info-note-svg {
+        fill: #5053f6;
+        vertical-align: middle;
+    }
+
+    .info-note-svg>path {
+        fill: #5053f6;
+    }
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fastest Serial terminal in your browser for Chrome.</title>
+<meta name="Description" content="Set your baud speed and hit connect.
+ A serial terminal that runs with out any plugins in chrome.">
+<div class="topnav">
+    <button class="active" onclick="location.href='index.html'">&#127968;</button>
+</div>
+
+<br>
+<form>
+    <div>
+        <h1>Settings</h1>
+
+        <p>
+            This is a serial terminal that runs without any plugins in chrome.
+            In this section you can configure your advanced settings.
+        </p>
+        <div class="info-note">
+            <p>
+                <span class="icon-span-note"><svg class="info-note-svg" viewBox="0 0 16 16" version="1.1" width="16"
+                        height="16" aria-hidden="true">
+                        <path fill-rule="evenodd"
+                            d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8zm6.5-.25A.75.75 0 017.25 7h1a.75.75 0 01.75.75v2.75h.25a.75.75 0 010 1.5h-2a.75.75 0 010-1.5h.25v-2h-.25a.75.75 0 01-.75-.75zM8 6a1 1 0 100-2 1 1 0 000 2z">
+                        </path>
+                    </svg><b> Note:</b>
+                    <p>
+                        If you are using an ESP32Cam module, RTS and DTS <em>must be</em> turned off
+                    </p>
+                </span>
+            </p>
+        </div>
+
+        <br>
+        <div class="settings-pane">
+            <div class="container">
+                <h2>Serial Settings</h2>
+
+                <label for="rtsOn">
+                    <input type="checkbox" id="rtsOn" onclick="localStorage.rtsOn = this.checked;" checked>RTS
+                </label>
+
+                <br>
+                <label for="dtrOn">
+                    <input type="checkbox" id="dtrOn" onclick="localStorage.dtrOn = this.checked;" checked>DTS
+                </label>
+
+                <br>
+
+            </div>
+        </div>
+    </div>
+</form>
+<script>
+    document.getElementById("rtsOn").checked = (localStorage.rtsOn == "false" ? false : true);
+    document.getElementById("dtrOn").checked = (localStorage.dtrOn == "false" ? false : true);
+</script>
+<br> © 2021 Autodrop3d Source && ZanzyTHEbar <a
+    href="https://github.com/autodrop3d/serialTerminal.com">https://github.com/autodrop3d/serialTerminal.com</a>

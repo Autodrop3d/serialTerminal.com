@@ -18,6 +18,10 @@
         border-color: #696 #363 #363 #696;
     }
 
+    [type="checkbox"] {
+        vertical-align: middle;
+    }
+
     #serialResults {
         font-family: monospace;
         white-space: pre;
@@ -29,12 +33,32 @@
         padding: 10px;
         margin: 0px;
     }
+/*
+    ::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 5px grey;
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #6d7faeb4;
+        border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #6d7fae;
+    }*/
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fastest Serial terminal in your browser for Chrome.</title>
 <meta name="Description" content="Set your baud speed and hit connect.
  A serial terminal that runs with out any plugins in chrome.">
 
+<br>
+<button class="active" onclick="location.href='settings.html'">&#9881;</button>
 <button onclick="connectSerial()">Connect</button>
 Baud:
 <input type="text" id="baud" list="baudList" style="width: 10ch;" onclick="this.value = ''"
@@ -63,20 +87,23 @@ Baud:
 <button onclick="sendCharacterNumber()" style="width:100px">Send Char</button>
 <br>
 
-<input type="checkbox" id="carriageReturn" onclick="localStorage.carriageReturn = this.checked;" checked>
-<label for="carriageReturn">send with /r</label>
+<label for="carriageReturn">
+    <input type="checkbox" id="carriageReturn" onclick="localStorage.carriageReturn = this.checked;" checked>send with
+    /r
+</label>
 
-<input type="checkbox" id="addLine" onclick="localStorage.addLine = this.checked;" checked>
-<label for="addLine">send with /n</label>
+<label for="addLine">
+    <input type="checkbox" id="addLine" onclick="localStorage.addLine = this.checked;" checked>send with /n
+</label>
 
-<input type="checkbox" id="echoOn" onclick="localStorage.echoOn = this.checked;" checked>
-<label for="echoOn">echo</label>
+<label for="echoOn">
+    <input type="checkbox" id="echoOn" onclick="localStorage.echoOn = this.checked;" checked>echo
+</label>
 
 
 <br>
 <div id="serialResults">
 </div>
-
 <script>
     var port, textEncoder, writableStreamClosed, writer, historyIndex = -1;
     const lineHistory = [];
@@ -86,6 +113,7 @@ Baud:
             // Prompt user to select any serial port.
             port = await navigator.serial.requestPort();
             await port.open({ baudRate: document.getElementById("baud").value });
+            await port.setSignals({ dataTerminalReady: document.getElementById("rtsOn").value, requestToSend: document.getElementById("dtrOn").value });
             listenToPort();
 
             textEncoder = new TextEncoderStream();
@@ -97,10 +125,10 @@ Baud:
         }
     }
 
-    async function sendCharacterNumber(){
-       document.getElementById("lineToSend").value = String.fromCharCode(document.getElementById("lineToSend").value);
+    async function sendCharacterNumber() {
+        document.getElementById("lineToSend").value = String.fromCharCode(document.getElementById("lineToSend").value);
     }
-   
+
     async function sendSerialLine() {
         dataToSend = document.getElementById("lineToSend").value;
         lineHistory.unshift(dataToSend);

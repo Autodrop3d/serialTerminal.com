@@ -33,38 +33,32 @@
         padding: 10px;
         margin: 0px;
     }
-
-    /* width */
+/*
     ::-webkit-scrollbar {
         width: 6px;
     }
 
-    /* Track */
     ::-webkit-scrollbar-track {
         box-shadow: inset 0 0 5px grey;
         border-radius: 10px;
     }
 
-    /* Handle */
     ::-webkit-scrollbar-thumb {
         background: #6d7faeb4;
         border-radius: 10px;
     }
 
-    /* Handle on hover */
     ::-webkit-scrollbar-thumb:hover {
         background: #6d7fae;
-    }
+    }*/
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fastest Serial terminal in your browser for Chrome.</title>
 <meta name="Description" content="Set your baud speed and hit connect.
  A serial terminal that runs with out any plugins in chrome.">
-<div class="topnav">
-    <a class="active" href="settings.html">Settings</a>
-</div>
 
 <br>
+<button class="active" onclick="location.href='settings.html'">&#9881;</button>
 <button onclick="connectSerial()">Connect</button>
 Baud:
 <input type="text" id="baud" list="baudList" style="width: 10ch;" onclick="this.value = ''"

@@ -1,8 +1,11 @@
 * {
-  background-color: #352e2e;
   font-family: monospace;
   color: rgb(60, 255, 1);
   padding: 0px;
+}
+
+body {
+  background-color: #000000;
 }
 
 button,

@@ -5,6 +5,9 @@ var port,
   historyIndex = -1;
 const lineHistory = [];
 
+const terminal = new Terminal();
+terminal.open(document.getElementById("terminal"));
+
 async function connectSerial() {
   try {
     // Prompt user to select any serial port.
@@ -40,7 +43,11 @@ async function sendSerialLine() {
   if (document.getElementById("addLine").checked == true)
     dataToSend = dataToSend + "\n";
   if (document.getElementById("echoOn").checked == true)
-    appendToTerminal("> " + dataToSend);
+    //appendToTerminal("> " + dataToSend);
+    appendToAdvancedTerminal(dataToSend);
+  if (dataToSend === "clear" || dataToSend === "clear\r\n" || dataToSend === "clear\r" || dataToSend === "clear\n")
+    advancedTerminalClear();
+    dataToSend = "";
   await writer.write(dataToSend);
   document.getElementById("lineToSend").value = "";
   //await writer.releaseLock();
@@ -60,11 +67,20 @@ async function listenToPort() {
       break;
     }
     // value is a string.
-    appendToTerminal(value);
+    //appendToTerminal(value);
+    appendToAdvancedTerminal(value);
   }
 }
 
 const serialResultsDiv = document.getElementById("serialResults");
+
+async function appendToAdvancedTerminal(newStuff) {
+  terminal.write("\x1B[1;3;34m:~$\x1B[0m " + newStuff);
+}
+
+async function advancedTerminalClear(){
+  terminal.clear();
+}
 
 async function appendToTerminal(newStuff) {
   serialResultsDiv.innerHTML += newStuff;

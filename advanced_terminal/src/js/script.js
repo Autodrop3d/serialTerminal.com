@@ -47,7 +47,6 @@ async function sendSerialLine() {
     appendToAdvancedTerminal(dataToSend);
   if (dataToSend === "clear" || dataToSend === "clear\r\n" || dataToSend === "clear\r" || dataToSend === "clear\n")
     advancedTerminalClear();
-    dataToSend = "";
   await writer.write(dataToSend);
   document.getElementById("lineToSend").value = "";
   //await writer.releaseLock();

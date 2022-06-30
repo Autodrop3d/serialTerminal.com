@@ -5,7 +5,15 @@ var port,
   historyIndex = -1;
 const lineHistory = [];
 
-const terminal = new Terminal();
+const terminal = new Terminal({
+  theme: {
+    background: "#202225",
+  },
+  options: {
+    cursorStyle: "underline",
+    cursorBlink: true,
+  },
+});
 terminal.open(document.getElementById("terminal"));
 
 async function connectSerial() {

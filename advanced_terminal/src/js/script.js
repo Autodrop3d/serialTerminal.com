@@ -43,9 +43,20 @@ async function sendSerialLine() {
   if (document.getElementById("addLine").checked == true)
     dataToSend = dataToSend + "\n";
   if (document.getElementById("echoOn").checked == true)
-    //appendToTerminal("> " + dataToSend);
-    appendToAdvancedTerminal(dataToSend);
-  if (dataToSend === "clear" || dataToSend === "clear\r\n" || dataToSend === "clear\r" || dataToSend === "clear\n")
+    if (
+      dataToSend === "clear" ||
+      dataToSend === "clear\r\n" ||
+      dataToSend === "clear\r" ||
+      dataToSend === "clear\n"
+    )
+      advancedTerminalClear();
+    else appendToAdvancedTerminal(dataToSend);
+  if (
+    dataToSend === "clear" ||
+    dataToSend === "clear\r\n" ||
+    dataToSend === "clear\r" ||
+    dataToSend === "clear\n"
+  )
     advancedTerminalClear();
   await writer.write(dataToSend);
   document.getElementById("lineToSend").value = "";
@@ -77,7 +88,7 @@ async function appendToAdvancedTerminal(newStuff) {
   terminal.write("\x1B[1;3;34m:~$\x1B[0m " + newStuff);
 }
 
-async function advancedTerminalClear(){
+async function advancedTerminalClear() {
   terminal.clear();
 }
 

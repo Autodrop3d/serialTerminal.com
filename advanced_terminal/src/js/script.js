@@ -8,12 +8,19 @@ const lineHistory = [];
 const terminal = new Terminal({
   theme: {
     background: "#202225",
+    cursor: "#ffffff",
+    selection: "#ffffff",
   },
-  options: {
-    cursorStyle: "underline",
-    cursorBlink: true,
-  },
+  cursorBlink: true,
+  cursorStyle: "underline",
+  disableStdin: false,
+  fontFamily: "monospace",
+  fontSize: 14,
+  fontWeight: "normal",
+  fontWeightBold: "bold",
+  renderType: "canvas",
 });
+
 terminal.open(document.getElementById("terminal"));
 
 async function connectSerial() {

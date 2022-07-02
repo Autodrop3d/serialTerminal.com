@@ -1,0 +1,7 @@
+node_modules
+.bundle
+/vendor
+.tmp
+.DS_Store
+.idea
+.vscode

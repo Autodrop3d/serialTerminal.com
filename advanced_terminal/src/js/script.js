@@ -9,6 +9,7 @@ var contributors = [
   `                      _                     _ \r\n                     (_)                   | |\r\n  _ __ ___  _ __ ___  _ ___  ___ ___   ___ | |\r\n | \'_ \` _ \\| \'_ \` _ \\| \/ __|\/ __\/ _ \\ \/ _ \\| |\r\n | | | | | | | | | | | \\__ \\ (_| (_) | (_) | |\r\n |_| |_| |_|_| |_| |_|_|___\/\\___\\___\/ \\___\/|_|\r\n                                             `,
   `  ______                  _______ _    _ ______ _                \r\n |___  \/                 |__   __| |  | |  ____| |               \r\n    \/ \/ __ _ _ __  _____   _| |  | |__| | |__  | |__   __ _ _ __ \r\n   \/ \/ \/ _\` | \'_ \\|_  \/ | | | |  |  __  |  __| | \'_ \\ \/ _\` | \'__|\r\n  \/ \/_| (_| | | | |\/ \/| |_| | |  | |  | | |____| |_) | (_| | |   \r\n \/_____\\__,_|_| |_\/___|\\__, |_|  |_|  |_|______|_.__\/ \\__,_|_|   \r\n                        __\/ |                                    \r\n                       |___\/                                    `
 ];
+var curr_line = "";
 const terminal = new Terminal({
   theme: {
     background: "#202225",
@@ -25,6 +26,55 @@ const terminal = new Terminal({
   renderType: "canvas"
 });
 terminal.open(document.getElementById("terminal"));
+terminal.prompt = () => {
+  terminal.write(
+    "\r\n\x1B[1;3;32mdev@cerealterminal\x1B[0m\x1B[1;3;34m:~$\x1B[0m "
+  );
+};
+terminal.writeln("Welcome to the Advanced Browser-based Cereal Terminal.");
+terminal.prompt();
+terminal.onKey((e) => {
+  //console.log(e.key);
+  const code = e.key.charCodeAt(0);
+  const printable =
+    !e.key.altKey && !e.key.altGraphKey && !e.key.ctrlKey && !e.key.metaKey;
+  terminal.write(e.key);
+  if (code == 127) {
+    //Backspace
+    terminal.write("\b \b");
+  }
+  if (code == 9) {
+    //Tab
+    terminal.write("\t");
+  }
+  if (e.key == "\x1b[D") {
+    //Left
+    terminal.write("\x1b[D");
+  }
+  // enter
+  if (code == 13) {
+    terminal.write("\n");
+    terminal.prompt();
+    console.log(curr_line);
+    if (curr_line.length > 0) {
+      lineHistory.push(curr_line);
+      historyIndex = lineHistory.length;
+    }
+    curr_line = "";
+  } else if (code == 8) {
+    // Do not delete the prompt
+    if (terminal.x > 2) {
+      curr_line = curr_line.slice(0, -1);
+      terminal.write("\b \b");
+    }
+  } else if (printable) {
+    curr_line += e.key;
+  }
+});
+// For debugging purposes
+/* terminal.onKey((e) => {
+  console.log(e.key);
+}); */
 async function connectSerial() {
   try {
     // Prompt user to select any serial port.
@@ -115,7 +165,7 @@ async function listenToPort() {
   }
 }
 async function appendToAdvancedTerminal(newStuff) {
-  terminal.write("\x1B[1;3;34m:~$\x1B[0m " + newStuff);
+  terminal.write(newStuff);
 }
 async function advancedTerminalClear() {
   terminal.clear();
@@ -127,8 +177,10 @@ function scrollHistory(direction) {
   );
   if (historyIndex >= 0) {
     document.getElementById("lineToSend").value = lineHistory[historyIndex];
+    appendToAdvancedTerminal(lineHistory[historyIndex]);
   } else {
     document.getElementById("lineToSend").value = "";
+    advancedTerminalClear();
   }
 }
 document

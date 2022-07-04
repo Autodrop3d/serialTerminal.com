@@ -80,11 +80,11 @@ async function connectSerial() {
   try {
     // Prompt user to select any serial port.
     port = await navigator.serial.requestPort();
-    if (settings !== {}) await port.open({ baudRate: document.getElementById("baud").value });
+    await port.open({ baudRate: document.getElementById("baud").value });
     let settings = {};
     if (document.getElementById("rtsOn").value == true) settings.dataTerminalReady = true;
     if (document.getElementById("dtrOn").value == true) settings.requestToSend = true;
-    await port.setSignals(settings);
+    if (settings !== {}) await port.setSignals(settings);
     listenToPort();
     textEncoder = new TextEncoderStream();
     writableStreamClosed = textEncoder.readable.pipeTo(port.writable);

@@ -89,10 +89,10 @@ Baud:
             // Prompt user to select any serial port.
             port = await navigator.serial.requestPort();
             await port.open({ baudRate: document.getElementById("baud").value });
-            if (settings !== {}) await port.open({ baudRate: document.getElementById("baud").value });
             let settings = {};
             if (document.getElementById("rtsOn").value == true) settings.dataTerminalReady = true;
             if (document.getElementById("dtrOn").value == true) settings.requestToSend = true;
+            await port.setSignals(settings);
             await port.setSignals(settings);
             listenToPort();
 

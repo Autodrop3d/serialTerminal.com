@@ -59,6 +59,7 @@ terminal.onKey((e) => {
     if (curr_line.length > 0) {
       lineHistory.push(curr_line);
       historyIndex = lineHistory.length;
+      await terminalCommands(curr_line);
     }
     curr_line = "";
   } else if (code == 8) {
@@ -79,11 +80,11 @@ async function connectSerial() {
   try {
     // Prompt user to select any serial port.
     port = await navigator.serial.requestPort();
-    await port.open({ baudRate: document.getElementById("baud").value });
-    await port.setSignals({
-      dataTerminalReady: document.getElementById("rtsOn").value,
-      requestToSend: document.getElementById("dtrOn").value
-    });
+    if (settings !== {}) await port.open({ baudRate: document.getElementById("baud").value });
+    let settings = {};
+    if (document.getElementById("rtsOn").value == true) settings.dataTerminalReady = true;
+    if (document.getElementById("dtrOn").value == true) settings.requestToSend = true;
+    await port.setSignals(settings);
     listenToPort();
     textEncoder = new TextEncoderStream();
     writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
@@ -91,6 +92,15 @@ async function connectSerial() {
   } catch {
     alert("Serial Connection Failed");
   }
+}
+async function terminalCommands(curr_line){
+  switch (curr_line) {
+    case "clear":
+      terminal.clear();
+      terminal.prompt();
+      break;
+    case "help":
+  }   
 }
 async function sendCharacterNumber() {
   document.getElementById("lineToSend").value = String.fromCharCode(
@@ -106,38 +116,17 @@ async function sendSerialLine() {
   if (document.getElementById("addLine").checked == true)
     dataToSend = dataToSend + "\n";
   if (document.getElementById("echoOn").checked == true)
-    if (
-      dataToSend === "clear" ||
-      dataToSend === "clear\r\n" ||
-      dataToSend === "clear\r" ||
-      dataToSend === "clear\n"
-    )
-      terminal.clear();
+    if (dataToSend.trim().startsWith("clear")) terminal.clear();
     else appendToAdvancedTerminal(dataToSend);
-  if (
-    dataToSend === "clear" ||
-    dataToSend === "clear\r\n" ||
-    dataToSend === "clear\r" ||
-    dataToSend === "clear\n"
-  )
-    terminal.clear();
-  if (
-    dataToSend === "neofetch" ||
-    dataToSend === "neofetch\r\n" ||
-    dataToSend === "neofetch\r" ||
-    dataToSend === "neofetch\n"
-  )
+  if (dataToSend.trim().startsWith("clear"));
+  terminal.clear();
+  if (dataToSend.trim().startsWith("neofetch"))
     printToConsole(neofetch_data, 32, false);
-  if (
-    dataToSend === "contributors" ||
-    dataToSend === "contributors\r\n" ||
-    dataToSend === "contributors\r" ||
-    dataToSend === "contributors\n"
-  )
+  if (dataToSend.trim().startsWith("contributors"))
     printToConsole(contributors, "33", true);
   await writer.write(dataToSend);
   document.getElementById("lineToSend").value = "";
-  //await writer.releaseLock();
+  await writer.releaseLock();
 }
 function printToConsole(data, color, array) {
   if (array == true) {
@@ -157,7 +146,7 @@ async function listenToPort() {
     const { value, done } = await reader.read();
     if (done) {
       // Allow the serial port to be closed later.
-      //reader.releaseLock();
+      reader.releaseLock();
       break;
     }
     // value is a string.

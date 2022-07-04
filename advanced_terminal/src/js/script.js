@@ -112,7 +112,7 @@ async function sendSerialLine() {
       dataToSend === "clear\r" ||
       dataToSend === "clear\n"
     )
-      advancedTerminalClear();
+      terminal.clear();
     else appendToAdvancedTerminal(dataToSend);
   if (
     dataToSend === "clear" ||
@@ -120,7 +120,7 @@ async function sendSerialLine() {
     dataToSend === "clear\r" ||
     dataToSend === "clear\n"
   )
-    advancedTerminalClear();
+    terminal.clear();
   if (
     dataToSend === "neofetch" ||
     dataToSend === "neofetch\r\n" ||
@@ -157,7 +157,7 @@ async function listenToPort() {
     const { value, done } = await reader.read();
     if (done) {
       // Allow the serial port to be closed later.
-      reader.releaseLock();
+      //reader.releaseLock();
       break;
     }
     // value is a string.
@@ -166,9 +166,6 @@ async function listenToPort() {
 }
 async function appendToAdvancedTerminal(newStuff) {
   terminal.write(newStuff);
-}
-async function advancedTerminalClear() {
-  terminal.clear();
 }
 function scrollHistory(direction) {
   historyIndex = Math.max(
@@ -180,7 +177,7 @@ function scrollHistory(direction) {
     appendToAdvancedTerminal(lineHistory[historyIndex]);
   } else {
     document.getElementById("lineToSend").value = "";
-    advancedTerminalClear();
+    terminal.clear();
   }
 }
 document
@@ -204,7 +201,3 @@ document.getElementById("carriageReturn").checked =
   localStorage.carriageReturn == "false" ? false : true;
 document.getElementById("echoOn").checked =
   localStorage.echoOn == "false" ? false : true;
-document.getElementById("rtsOn").checked =
-  localStorage.rtsOn == "false" ? false : true;
-document.getElementById("dtrOn").checked =
-  localStorage.dtrOn == "false" ? false : true;

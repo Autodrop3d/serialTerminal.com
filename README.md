@@ -27,3 +27,6 @@ Full source here:
 Known to work in chrome, chromium and edge browsers.
 Will not work in firefox or brave. See this issue for details
 https://github.com/mmiscool/serialTerminal.com/issues/1
+
+Originally created by mmiscool as a simple example. 
+ZanzyTHEbar has made some significant improvements and added a settings page exposing more of the connection settings along with doing an xterm.js implementation under the advanced button. 

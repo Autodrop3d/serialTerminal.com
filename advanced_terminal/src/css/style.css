@@ -1,0 +1,110 @@
+* {
+  font-family: monospace;
+  color: rgb(60, 255, 1);
+  padding: 0px;
+}
+
+body {
+  background-color: #352e2e;
+}
+
+button,
+datalist {
+  background-color: rgb(85, 85, 85);
+}
+
+input[type="text"] {
+  color: rgb(179, 255, 179);
+  background-color: rgb(102, 86, 86);
+  border: 1px solid;
+  border-color: #696 #363 #363 #696;
+}
+
+[type="checkbox"] {
+  vertical-align: middle;
+}
+
+#serialResults {
+  font-family: monospace;
+  white-space: pre;
+  height: calc(100% - 120px);
+  width: calc(100% - 20px);
+  border-style: solid;
+  overflow: scroll;
+  background-color: rgb(88, 92, 92);
+  padding: 10px;
+  margin: 0px;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #6d7faeb4;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #6d7fae;
+}
+
+.settings-pane {
+  box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset,
+    rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset,
+    rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px,
+    rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px,
+    rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
+  transition: 0.3s;
+  border-radius: 8px;
+  border: 1px solid;
+  border-color: #696 #363 #363 #696;
+}
+
+.settings-pane:hover {
+  box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
+}
+
+.container {
+  padding: 2px 16px 16px;
+}
+
+.info-note {
+  border-left: 6px solid #5053f6;
+}
+
+.info-note > p {
+  font-weight: bold;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-left: 4px;
+  margin-right: 0px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-left: 10px;
+  padding-right: 0px;
+}
+
+.info-note > p {
+  font-weight: bold;
+  margin-top: 0px;
+  margin-bottom: 4px;
+  margin-right: 0px;
+  padding-top: 0px;
+  padding-bottom: 10px;
+  padding-right: 0px;
+}
+
+.info-note-svg {
+  fill: #5053f6;
+  vertical-align: middle;
+}
+
+.info-note-svg > path {
+  fill: #5053f6;
+}

@@ -77,29 +77,73 @@ terminal.onKey((e) => {
     curr_line += e.key;
   }
 });
+terminal.attachCustomKeyEventHandler((arg) => {
+  if (arg.ctrlKey && arg.code === "KeyV" && arg.type === "keydown") {
+    navigator.clipboard.readText().then((text) => {
+      printToConsole(text);
+    });
+  }
+  return true;
+});
+terminal.attachCustomKeyEventHandler((arg) => {
+  if (arg.ctrlKey && arg.code === "KeyC" && arg.type === "keydown") {
+    const selection = terminal.getSelection();
+    if (selection) {
+      copyText(selection);
+      return false;
+    }
+  }
+  return true;
+});
 async function connectSerial() {
   try {
     if ("serial" in navigator) {
+      let portSettings = {};
+      var portSettings_deserialized = JSON.parse(
+        localStorage.getItem("portSettings")
+      );
+      if (portSettings_deserialized.flowControl != "none")
+        portSettings.flowControl = portSettings_deserialized.flowControl;
+      if (portSettings_deserialized.rtsCtsOn == "true")
+        portSettings.rtsCts = true;
+      if (portSettings_deserialized.dtrDsrOn == "true")
+        portSettings.dtrDsr = true;
+      if (portSettings_deserialized.dataBits != "0")
+        portSettings.dataBits = portSettings_deserialized.dataBits;
+      if (portSettings_deserialized.stopBits != "0")
+        portSettings.stopBits = portSettings_deserialized.stopBits;
+      if (portSettings_deserialized.parity != "none")
+        portSettings.parity = portSettings_deserialized.parity;
+      if (portSettings_deserialized.bufferSize != "0")
+        portSettings.bufferSize = portSettings_deserialized.bufferSize;
+
       // The Web Serial API is supported.
       // Prompt user to select any serial port.
-      port = await navigator.serial.requestPort();
-      await port.open({ baudRate: document.getElementById("baud").value });
-      let settings = {};
+      if (Object.keys(portSettings).length > 0) {
+        port = await port.open({
+          baudRate: document.getElementById("baud").value,
+          portSettings
+        });
+      } else {
+        port = await navigator.serial.requestPort();
+        await port.open({ baudRate: document.getElementById("baud").value });
+        let settings = {};
 
-      if (localStorage.dtrOn == "true") settings.dataTerminalReady = true;
-      if (localStorage.rtsOn == "true") settings.requestToSend = true;
-      if (Object.keys(settings).length > 0) {
-        await port.setSignals(settings);
-        const signals = await port.getSignals();
-        console.log(`Clear To Send:       ${signals.clearToSend}`);
-        console.log(`Data Carrier Detect: ${signals.dataCarrierDetect}`);
-        console.log(`Data Set Ready:      ${signals.dataSetReady}`);
-        console.log(`Ring Indicator:      ${signals.ringIndicator}`);
+        if (localStorage.dtrOn == "true") settings.dataTerminalReady = true;
+        if (localStorage.rtsOn == "true") settings.requestToSend = true;
+        if (Object.keys(settings).length > 0) {
+          await port.setSignals(settings);
+          const signals = await port.getSignals();
+          console.log(`Clear To Send:       ${signals.clearToSend}`);
+          console.log(`Data Carrier Detect: ${signals.dataCarrierDetect}`);
+          console.log(`Data Set Ready:      ${signals.dataSetReady}`);
+          console.log(`Ring Indicator:      ${signals.ringIndicator}`);
+        }
+        textEncoder = new TextEncoderStream();
+        writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
+        writer = textEncoder.writable.getWriter();
+        await listenToPort();
       }
-      textEncoder = new TextEncoderStream();
-      writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
-      writer = textEncoder.writable.getWriter();
-      await listenToPort();
     } else {
       // The Web Serial API is not supported.
       if (
@@ -112,6 +156,22 @@ async function connectSerial() {
   } catch (e) {
     alert("Serial Connection Failed" + e);
   }
+}
+function escapeXml(unsafe) {
+  return unsafe.replace(/[<>&'"]/g, function (c) {
+    switch (c) {
+      case "<":
+        return "&lt;";
+      case ">":
+        return "&gt;";
+      case "&":
+        return "&amp;";
+      case "'":
+        return "&apos;";
+      case '"':
+        return "&quot;";
+    }
+  });
 }
 async function terminalCommands(curr_line) {
   if (localStorage.serialOnlyState == "true") {

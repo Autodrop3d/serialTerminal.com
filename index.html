@@ -11,6 +11,24 @@
         background-color: rgb(85, 85, 85);
     }
 
+    button {
+        background-color: rgb(85, 85, 85);
+        border-radius: 8px;
+        border-style: solid;
+        border-color: #696 #363 #363 #696;
+        border-width: 1px;
+        padding: 5px;
+        margin: 0px;
+    }
+
+    button:hover {
+        background-color: rgb(102, 86, 86);
+    }
+
+    button:focus {
+        background-color: rgba(102, 86, 86, 0.675);
+    }
+
     input[type=text] {
         color: rgb(179, 255, 179);
         background-color: rgb(102, 86, 86);
@@ -39,7 +57,7 @@
 <meta name="Description" content="Set your baud speed and hit connect.
  A serial terminal that runs with out any plugins in chrome.">
 <button class="active" onclick="location.href='settings.html'">&#9881;</button>
-<button class="active" onclick="location.href='advanced_terminal/src/html/index.html'">&#128435;</button>
+<button class="active" style="color: rgb(60, 255, 1);" onclick="location.href='advanced_terminal/src/html/index.html'">&#128435;</button>
 <button onclick="connectSerial()">Connect</button>
 Baud:
 <input type="text" id="baud" list="baudList" style="width: 10ch;" onclick="this.value = ''"
@@ -98,13 +116,13 @@ Baud:
             if (localStorage.dtrOn == "true") settings.dataTerminalReady = true;
             if (localStorage.rtsOn == "true") settings.requestToSend = true;
             if (Object.keys(settings).length > 0) await port.setSignals(settings);
-  
-            
+
+
             textEncoder = new TextEncoderStream();
             writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
             writer = textEncoder.writable.getWriter();
             await listenToPort();
-        } catch (e){
+        } catch (e) {
             alert("Serial Connection Failed" + e);
         }
     }

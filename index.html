@@ -98,13 +98,13 @@ Baud:
             if (localStorage.dtrOn == "true") settings.dataTerminalReady = true;
             if (localStorage.rtsOn == "true") settings.requestToSend = true;
             if (Object.keys(settings).length > 0) await port.setSignals(settings);
-
-            await listenToPort();
+  
+            
             textEncoder = new TextEncoderStream();
             writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
             writer = textEncoder.writable.getWriter();
-
-        } catch (e) {
+            await listenToPort();
+        } catch (e){
             alert("Serial Connection Failed" + e);
         }
     }
@@ -118,7 +118,9 @@ Baud:
         if (document.getElementById("carriageReturn").checked == true) dataToSend = dataToSend + "\r";
         if (document.getElementById("addLine").checked == true) dataToSend = dataToSend + "\n";
         if (document.getElementById("echoOn").checked == true) appendToTerminal("> " + dataToSend);
+        await writer.write(dataToSend);
         if (dataToSend.trim().startsWith('\x03')) echo(false);
+        document.getElementById("lineToSend").value = "";
         document.getElementById("lineToSend").value = "";
     }
     async function listenToPort() {

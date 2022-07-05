@@ -46,7 +46,8 @@
                         <h2>Serial Settings</h2>
 
                         <div class="buttonGroup">
-                            <button class="btn btn-primary" type="button" id="forgetDevice" onclick='forgetTrigger()'>Forget
+                            <button class="btn btn-primary" type="button" id="forgetDevice"
+                                onclick='forgetTrigger()'>Forget
                                 Device</button>
                         </div>
                         <section class="checkBoxes">
@@ -71,40 +72,45 @@
                             </label>
                         </section>
                         <br>
-                        <section class="advancedInputs">
-                            <ul >
-                                <li class="form-row">
-                                    <label for="bufferSize"> Buffer Size:
-                                        <input type="number" id="bufferSize" style="width: 10ch;"
-                                            onchange='fillObject(portSettings, "bufferSize", this.value)'>
-                                    </label>
-                                </li>
-                                <li class="form-row">
-                                    <label for="parity"> Parity:
-                                        <input type="text" id="parity" style="width: 10ch;"
-                                            onchange='fillObject(portSettings, "parity", this.value)'>
-                                    </label>
-                                </li>
-                                <li class="form-row">
-                                    <label for="dataBits"> Data Bits:
-                                        <input type="number" id="dataBits" style="width: 10ch;"
-                                            onchange='fillObject(portSettings, "dataBits", this.value)'>
-                                    </label>
-                                </li>
-                                <li class="form-row">
-                                    <label for="stopBits"> Stop Bits:
-                                        <input type="number" id="stopBits" style="width: 10ch;"
-                                            onchange='fillObject(portSettings, "stopBits", this.value)'>
-                                    </label>
-                                </li>
-                                <li class="form-row">
-                                    <label for="flowControl"> Flow Control:
-                                        <input type="text" id="flowControl" style="width: 10ch;"
-                                            onchange='fillObject(portSettings, "flowControl", this.value)'>
-                                    </label>
-                                </li>
-                            </ul>
-                        </section>
+                        <details>
+                            <summary>Advanced Settings</summary>
+                            <br>
+                            <section class="advancedInputs">
+                                <ul>
+                                    <li class="form-row">
+                                        <label for="bufferSize"> Buffer Size:
+                                            <input type="number" id="bufferSize" style="width: 10ch;"
+                                                onchange='fillObject(portSettings, "bufferSize", this.value)'>
+                                        </label>
+                                    </li>
+                                    <li class="form-row">
+                                        <label for="parity"> Parity:
+                                            <input type="text" id="parity" style="width: 10ch;"
+                                                onchange='fillObject(portSettings, "parity", this.value)'>
+                                        </label>
+                                    </li>
+                                    <li class="form-row">
+                                        <label for="dataBits"> Data Bits:
+                                            <input type="number" id="dataBits" style="width: 10ch;"
+                                                onchange='fillObject(portSettings, "dataBits", this.value)'>
+                                        </label>
+                                    </li>
+                                    <li class="form-row">
+                                        <label for="stopBits"> Stop Bits:
+                                            <input type="number" id="stopBits" style="width: 10ch;"
+                                                onchange='fillObject(portSettings, "stopBits", this.value)'>
+                                        </label>
+                                    </li>
+                                    <li class="form-row">
+                                        <label for="flowControl"> Flow Control:
+                                            <input type="text" id="flowControl" style="width: 10ch;"
+                                                onchange='fillObject(portSettings, "flowControl", this.value)'>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </section>
+
+                        </details>
                         <br>
                     </div>
                 </div>

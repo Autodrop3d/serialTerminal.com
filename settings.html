@@ -1,141 +1,164 @@
-<style>
-    * {
-        background-color: #352e2e;
-        font-family: monospace;
-        color: rgb(60, 255, 1);
-        padding: 0px;
-    }
+<!DOCTYPE html>
+<html lang="en">
 
-    button {
-        background-color: rgb(85, 85, 85);
-    }
+<head>
+    <link rel="stylesheet" href="/advanced_terminal/src/css/style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fastest Serial terminal in your browser for Chrome.</title>
+    <meta name="Description" content="Set your baud speed and hit connect.
+     A serial terminal that runs with out any plugins in chrome.">
+</head>
 
-    input[type=text] {
-        color: rgb(179, 255, 179);
-        background-color: #665656;
-        border: 1px solid;
-        border-color: #696 #363 #363 #696;
-    }
+<body>
+    <form>
+        <div class="topnav">
+            <button class="active btn btn-primary" type="button" onclick="location.href='index.html'">&#127968;</button>
+            <button class="active btn btn-primary" style="color: rgb(60, 255, 1);" type="button"
+                onclick="location.href='advanced_terminal/src/html/index.html'">&#128435;</button>
+            <br>
+        </div>
+        <div>
+            <h1>Settings</h1>
 
-    [type="checkbox"] {
-        vertical-align: middle;
-    }
-
-    .settings-pane {
-        box-shadow: rgba(0, 0, 0, 0.17) 0px -23px 25px 0px inset, rgba(0, 0, 0, 0.15) 0px -36px 30px 0px inset, rgba(0, 0, 0, 0.1) 0px -79px 40px 0px inset, rgba(0, 0, 0, 0.06) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px;
-        transition: 0.3s;
-        border-radius: 8px;
-        border: 1px solid;
-        border-color: #696 #363 #363 #696;
-    }
-
-    .settings-pane:hover {
-        box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
-    }
-
-    .container {
-        padding: 2px 16px 16px;
-    }
-
-    .info-note {
-        border-left: 6px solid #5053f6;
-    }
-
-    .info-note>p {
-        font-weight: bold;
-        margin-top: 0px;
-        margin-bottom: 0px;
-        margin-left: 4px;
-        margin-right: 0px;
-        padding-top: 0px;
-        padding-bottom: 0px;
-        padding-left: 10px;
-        padding-right: 0px;
-    }
-
-    .info-note>p {
-        font-weight: bold;
-        margin-top: 0px;
-        margin-bottom: 4px;
-        margin-right: 0px;
-        padding-top: 0px;
-        padding-bottom: 10px;
-        padding-right: 0px;
-    }
-
-    .info-note-svg {
-        fill: #5053f6;
-        vertical-align: middle;
-    }
-
-    .info-note-svg>path {
-        fill: #5053f6;
-    }
-</style>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fastest Serial terminal in your browser for Chrome.</title>
-<meta name="Description" content="Set your baud speed and hit connect.
- A serial terminal that runs with out any plugins in chrome.">
-<div class="topnav">
-    <button class="active" onclick="location.href='index.html'">&#127968;</button>
-    <button class="active" onclick="location.href='advanced_terminal/src/html/index.html'">&#128435;</button>
-</div>
-
-<br>
-<form>
-    <div>
-        <h1>Settings</h1>
-
-        <p>
-            This is a serial terminal that runs without any plugins in chrome.
-            In this section you can configure your advanced settings.
-        </p>
-        <div class="info-note">
             <p>
-                <span class="icon-span-note"><svg class="info-note-svg" viewBox="0 0 16 16" version="1.1" width="16"
-                        height="16" aria-hidden="true">
-                        <path fill-rule="evenodd"
-                            d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8zm6.5-.25A.75.75 0 017.25 7h1a.75.75 0 01.75.75v2.75h.25a.75.75 0 010 1.5h-2a.75.75 0 010-1.5h.25v-2h-.25a.75.75 0 01-.75-.75zM8 6a1 1 0 100-2 1 1 0 000 2z">
-                        </path>
-                    </svg><b> Note:</b>
-                    <p>
-                        If you are using an ESP32Cam module, RTS and DTS <em>must be</em> turned off
-                    </p>
-                </span>
+                This is a serial terminal that runs without any plugins in chrome.
+                In this section you can configure your advanced settings.
             </p>
+            <section class="info-note">
+                <p>
+                    <span class="icon-span-note"><svg class="info-note-svg" viewBox="0 0 16 16" version="1.1" width="16"
+                            height="16" aria-hidden="true">
+                            <path fill-rule="evenodd"
+                                d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8zm6.5-.25A.75.75 0 017.25 7h1a.75.75 0 01.75.75v2.75h.25a.75.75 0 010 1.5h-2a.75.75 0 010-1.5h.25v-2h-.25a.75.75 0 01-.75-.75zM8 6a1 1 0 100-2 1 1 0 000 2z">
+                            </path>
+                        </svg><b> Note:</b>
+                        <p>
+                            If you are using an ESP32Cam module, RTS and DTS <em>must be</em> turned off
+                        </p>
+                    </span>
+                </p>
+            </section>
+
+            <br>
+            <section class="settings-pane">
+                <div class="card">
+                    <div class="container">
+                        <h2>Serial Settings</h2>
+
+                        <div class="buttonGroup">
+                            <button class="btn btn-primary" type="button" id="forgetDevice"
+                                onclick='forgetTrigger()'>Forget
+                                Device</button>
+                        </div>
+                        <section class="checkBoxes">
+                            <br>
+                            <label for="rtsOn">
+                                <input type="checkbox" id="rtsOn" onclick="localStorage.rtsOn = this.checked;"
+                                    unchecked>RTS
+                            </label>
+
+                            <label for="dtrOn">
+                                <input type="checkbox" id="dtrOn" onclick="localStorage.dtrOn = this.checked;"
+                                    unchecked>DTR
+                            </label>
+                            <label for="dtrDsrOn">
+                                <input type="checkbox" id="dtrDsrOn" onclick="localStorage.dtrDsrOn = this.checked;"
+                                    unchecked>dtrDsr
+                            </label>
+
+                            <label for="rtsCtsOn">
+                                <input type="checkbox" id="rtsCtsOn" onclick="localStorage.rtsCtsOn = this.checked;"
+                                    unchecked>rtsCts
+                            </label>
+                        </section>
+                        <br>
+                        <details>
+                            <summary>Advanced Settings</summary>
+                            <br>
+                            <section class="advancedInputs">
+                                <ul>
+                                    <li class="form-row">
+                                        <label for="bufferSize"> Buffer Size:
+                                            <input type="number" id="bufferSize" style="width: 10ch;"
+                                                onchange='fillObject(portSettings, "bufferSize", this.value)'>
+                                        </label>
+                                    </li>
+                                    <li class="form-row">
+                                        <label for="parity"> Parity:
+                                            <input type="text" id="parity" style="width: 10ch;"
+                                                onchange='fillObject(portSettings, "parity", this.value)'>
+                                        </label>
+                                    </li>
+                                    <li class="form-row">
+                                        <label for="dataBits"> Data Bits:
+                                            <input type="number" id="dataBits" style="width: 10ch;"
+                                                onchange='fillObject(portSettings, "dataBits", this.value)'>
+                                        </label>
+                                    </li>
+                                    <li class="form-row">
+                                        <label for="stopBits"> Stop Bits:
+                                            <input type="number" id="stopBits" style="width: 10ch;"
+                                                onchange='fillObject(portSettings, "stopBits", this.value)'>
+                                        </label>
+                                    </li>
+                                    <li class="form-row">
+                                        <label for="flowControl"> Flow Control:
+                                            <input type="text" id="flowControl" style="width: 10ch;"
+                                                onchange='fillObject(portSettings, "flowControl", this.value)'>
+                                        </label>
+                                    </li>
+                                </ul>
+                            </section>
+                        </details>
+                        <br>
+                    </div>
+                </div>
+            </section>
         </div>
+        <br> © 2021 Autodrop3d Source && ZanzyTHEbar <a
+            href="https://github.com/autodrop3d/serialTerminal.com">https://github.com/autodrop3d/serialTerminal.com</a>
+    </form>
+    <script>
+        var portSettings = {
+            bufferSize: "0",
+            parity: "none",
+            dataBits: "0",
+            stopBits: "0",
+            flowControl: "none"
+        };
 
-        <br>
-        <div class="settings-pane">
-            <div class="container">
-                <h2>Serial Settings</h2>
+        localStorage.setItem("portSettings", JSON.stringify(portSettings));
 
-                <label for="rtsOn">
-                    <input type="checkbox" id="rtsOn" onclick="localStorage.rtsOn = this.checked;" unchecked>RTS
-                </label>
+        function fillObject(obj, key, value) {
+            obj[key] = value;
+            var temp = JSON.stringify(obj);
+            console.log(temp);
+            localStorage.setItem("portSettings", temp);
+        }
 
-                <button id="forgetDevice"
-                    onclick='forgetTrigger()'>Forget
-                    Device</button>
+        var portSettings_deserialized = JSON.parse(localStorage.getItem("portSettings"));
 
-                <br>
-                <label for="dtrOn">
-                    <input type="checkbox" id="dtrOn" onclick="localStorage.dtrOn = this.checked;" unchecked>DTR
-                </label>
 
-                <br>
-            </div>
-        </div>
-    </div>
-</form>
-<script>
-    document.getElementById("rtsOn").checked = (localStorage.rtsOn == "false" ? false : true);
-    document.getElementById("dtrOn").checked = (localStorage.dtrOn == "false" ? false : true);
-    document.getElementById("forgetDevice").onclick = function() {
-        localStorage.forgetDevice == "true" ? localStorage.forgetDevice = "false" : localStorage.forgetDevice = "true";
-        if (localStorage.forgetDevice == "true") alert("Forget Activated - Device will be forgotten when you visit the terminal page again.");
-        else if (alert("Forget Deactivated"));
-    };
-</script>
-<br> © 2021 Autodrop3d Source && ZanzyTHEbar <a
-    href="https://github.com/autodrop3d/serialTerminal.com">https://github.com/autodrop3d/serialTerminal.com</a>
+        document.getElementById("rtsOn").checked = (localStorage.rtsOn == "false" ? false : true);
+        document.getElementById("dtrOn").checked = (localStorage.dtrOn == "false" ? false : true);
+        document.getElementById("rtsCtsOn").checked = (localStorage.rtsCtsOn == "true" ? true : false);
+        document.getElementById("dtrDsrOn").checked = (localStorage.dtrDsrOn == "true" ? true : false);
+        document.getElementById("forgetDevice").onclick = function () {
+            localStorage.forgetDevice == "true" ? localStorage.forgetDevice = "false" : localStorage.forgetDevice = "true";
+            if (localStorage.forgetDevice == "true") alert("Forget Activated - Device will be forgotten when you visit the terminal page again.");
+            else if (alert("Forget Deactivated"));
+        };
+        document.getElementById("bufferSize").value =
+            portSettings_deserialized.bufferSize == undefined ? "0" : portSettings_deserialized.bufferSize;
+        document.getElementById("parity").value =
+            portSettings_deserialized.parity == undefined ? "none" : portSettings_deserialized.parity;
+        document.getElementById("dataBits").value =
+            portSettings_deserialized.dataBits == undefined ? "0" : portSettings_deserialized.dataBits;
+        document.getElementById("stopBits").value =
+            localStorage.portSettings.stopBits == undefined ? "0" : portSettings_deserialized.stopBits;
+        document.getElementById("flowControl").value =
+            portSettings_deserialized.flowControl == undefined ? "none" : portSettings_deserialized.flowControl;
+    </script>
+</body>
+
+</html>

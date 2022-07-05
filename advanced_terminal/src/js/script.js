@@ -298,7 +298,7 @@ async function listenToPort() {
           break;
         }
         // value is a string.
-        appendToAdvancedTerminal(value);
+        printToConsole(value, 36, false);
       }
     } catch (error) {
       //! TODO: Handle non-fatal read error.

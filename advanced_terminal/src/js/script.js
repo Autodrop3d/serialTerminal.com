@@ -346,7 +346,6 @@ async function sendSerialLine() {
   await writer.write(dataToSend);
   if (dataToSend.trim().startsWith("\x03")) echo(false);
   document.getElementById("lineToSend").value = "";
-  await writer.releaseLock();
 }
 function printToConsoleln(data, color, array) {
   if (array == true) {

@@ -80,12 +80,12 @@ Baud:
             // Prompt user to select any serial port.
             port = await navigator.serial.requestPort();
             await port.open({ baudRate: document.getElementById("baud").value });
-            listenToPort();
 
             textEncoder = new TextEncoderStream();
             writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
 
             writer = textEncoder.writable.getWriter();
+            listenToPort();
         } catch {
             alert("Serial Connection Failed");
         }
@@ -97,13 +97,7 @@ Baud:
         dataToSend = document.getElementById("lineToSend").value;
         if (document.getElementById("addLine").checked == true) dataToSend = dataToSend + "\r\n";
         if (document.getElementById("echoOn").checked == true) appendToTerminal("> " + dataToSend);
-        if (port) {
-            await writer.write(dataToSend);
-        }
-        document.getElementById("lineToSend").value = "";
-        if (port) {
-            await writer.releaseLock();
-        }
+        await writer.write(dataToSend);
     }
     async function listenToPort() {
         const textDecoder = new TextDecoderStream();

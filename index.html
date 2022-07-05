@@ -5,19 +5,23 @@
         color: rgb(60, 255, 1);
         padding: 0px;
     }
+
     button,
     datalist {
         background-color: rgb(85, 85, 85);
     }
+
     input[type=text] {
         color: rgb(179, 255, 179);
         background-color: rgb(102, 86, 86);
         border: 1px solid;
         border-color: #696 #363 #363 #696;
     }
+
     [type="checkbox"] {
         vertical-align: middle;
     }
+
     #serialResults {
         font-family: monospace;
         white-space: pre;
@@ -90,18 +94,17 @@ Baud:
             port = await navigator.serial.requestPort();
             await port.open({ baudRate: document.getElementById("baud").value });
             let settings = {};
-            if (document.getElementById("rtsOn").value == true) settings.dataTerminalReady = true;
-            if (document.getElementById("dtrOn").value == true) settings.requestToSend = true;
-            await port.setSignals(settings);
-            await port.setSignals(settings);
-            listenToPort();
 
+            if (localStorage.dtrOn == "true") settings.dataTerminalReady = true;
+            if (localStorage.rtsOn == "true") settings.requestToSend = true;
+            if (Object.keys(settings).length > 0) await port.setSignals(settings);
+  
+            await listenToPort();
             textEncoder = new TextEncoderStream();
             writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
-
-            writer = textEncoder.writable.getWriter();
-        } catch {
-            alert("Serial Connection Failed");
+            writer = textEncoder.writable;
+        } catch (e){
+            alert("Serial Connection Failed" + e);
         }
     }
     async function sendCharacterNumber() {
@@ -114,9 +117,14 @@ Baud:
         if (document.getElementById("carriageReturn").checked == true) dataToSend = dataToSend + "\r";
         if (document.getElementById("addLine").checked == true) dataToSend = dataToSend + "\n";
         if (document.getElementById("echoOn").checked == true) appendToTerminal("> " + dataToSend);
-        await writer.write(dataToSend);
+        if (dataToSend.trim().startsWith('\x03')) echo(false);
+        const _writer = writer.getWriter();
+        lines.forEach((dataTosSend) => {
+            console.log('[SEND] ' + dataToSend);
+            _writer.write(dataToSend);
+        });
         document.getElementById("lineToSend").value = "";
-        //await writer.releaseLock();
+        await writer.releaseLock();
     }
     async function listenToPort() {
         const textDecoder = new TextDecoderStream();
@@ -126,9 +134,14 @@ Baud:
         // Listen to data coming from the serial device.
         while (true) {
             const { value, done } = await reader.read();
+            if (value) {
+                log.textContent += value + '\n';
+            }
             if (done) {
                 // Allow the serial port to be closed later.
-                //reader.releaseLock();
+                readableStreamClosed.then(() => port.readable.close());
+                console.log('[readLoop] DONE', done);
+                reader.releaseLock();
                 break;
             }
             // value is a string.

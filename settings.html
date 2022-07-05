@@ -114,13 +114,16 @@
                     <input type="checkbox" id="rtsOn" onclick="localStorage.rtsOn = this.checked;" unchecked>RTS
                 </label>
 
+                <button id="forgetDevice"
+                    onclick='forgetTrigger()'>Forget
+                    Device</button>
+
                 <br>
                 <label for="dtrOn">
-                    <input type="checkbox" id="dtrOn" onclick="localStorage.dtrOn = this.checked;" unchecked>DTS
+                    <input type="checkbox" id="dtrOn" onclick="localStorage.dtrOn = this.checked;" unchecked>DTR
                 </label>
 
                 <br>
-
             </div>
         </div>
     </div>
@@ -128,6 +131,11 @@
 <script>
     document.getElementById("rtsOn").checked = (localStorage.rtsOn == "false" ? false : true);
     document.getElementById("dtrOn").checked = (localStorage.dtrOn == "false" ? false : true);
+    document.getElementById("forgetDevice").onclick = function() {
+        localStorage.forgetDevice == "true" ? localStorage.forgetDevice = "false" : localStorage.forgetDevice = "true";
+        if (localStorage.forgetDevice == "true") alert("Forget Activated - Device will be forgotten when you visit the terminal page again.");
+        else if (alert("Forget Deactivated"));
+    };
 </script>
 <br> © 2021 Autodrop3d Source && ZanzyTHEbar <a
     href="https://github.com/autodrop3d/serialTerminal.com">https://github.com/autodrop3d/serialTerminal.com</a>

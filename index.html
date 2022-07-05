@@ -98,13 +98,13 @@ Baud:
             if (localStorage.dtrOn == "true") settings.dataTerminalReady = true;
             if (localStorage.rtsOn == "true") settings.requestToSend = true;
             if (Object.keys(settings).length > 0) await port.setSignals(settings);
-  
+
             await listenToPort();
             textEncoder = new TextEncoderStream();
             writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
             writer = textEncoder.writable.getWriter();
-            
-        } catch (e){
+
+        } catch (e) {
             alert("Serial Connection Failed" + e);
         }
     }
@@ -120,7 +120,6 @@ Baud:
         if (document.getElementById("echoOn").checked == true) appendToTerminal("> " + dataToSend);
         if (dataToSend.trim().startsWith('\x03')) echo(false);
         document.getElementById("lineToSend").value = "";
-        await writer.releaseLock();
     }
     async function listenToPort() {
         const textDecoder = new TextDecoderStream();
@@ -132,7 +131,6 @@ Baud:
             const { value, done } = await reader.read();
             if (done) {
                 // Allow the serial port to be closed later.
-                readableStreamClosed.then(() => port.readable.close());
                 console.log('[readLoop] DONE', done);
                 reader.releaseLock();
                 break;

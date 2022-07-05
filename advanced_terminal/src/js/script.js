@@ -13,9 +13,10 @@ var contributors = [
   `  ______                  _______ _    _ ______ _                \r\n |___  \/                 |__   __| |  | |  ____| |               \r\n    \/ \/ __ _ _ __  _____   _| |  | |__| | |__  | |__   __ _ _ __ \r\n   \/ \/ \/ _\` | \'_ \\|_  \/ | | | |  |  __  |  __| | \'_ \\ \/ _\` | \'__|\r\n  \/ \/_| (_| | | | |\/ \/| |_| | |  | |  | | |____| |_) | (_| | |   \r\n \/_____\\__,_|_| |_\/___|\\__, |_|  |_|  |_|______|_.__\/ \\__,_|_|   \r\n                        __\/ |                                    \r\n                       |___\/                                    `
 ];
 
-var entries = [];
-var currPos = 0;
-var pos = 0;
+//var entries = [];
+//var currPos = 0;
+//var pos = 0;
+
 var curr_line = "";
 
 const terminal = new Terminal({
@@ -44,7 +45,7 @@ terminal.prompt = () => {
 terminal.writeln("Welcome to the Advanced Browser-based Cereal Terminal.");
 terminal.prompt();
 terminal.onKey((e) => {
-  //console.log(e.key);
+  console.log(e.key);
   const code = e.key.charCodeAt(0);
   const printable =
     !e.key.altKey && !e.key.altGraphKey && !e.key.ctrlKey && !e.key.metaKey;
@@ -75,83 +76,7 @@ terminal.onKey((e) => {
   } else if (printable) {
     curr_line += e.key;
   }
-  /* !(e.keyCode === 37 && terminal.buffer.cursorX < 6);
-
-  if (e.keyCode === 13) {
-    // Enter key
-    if (curr_line.replace(/^\s+|\s+$/g, "").length != 0) {
-      // Check if string is all whitespace
-      entries.push(curr_line);
-      currPos = entries.length - 1;
-      terminalCommands(curr_line);
-      terminal.prompt();
-    } else {
-      terminal.write("\n\33[2K\r\u001b[32mscm> \u001b[37m");
-    }
-    curr_line = "";
-  } else if (e.keyCode === 127) {
-    // Backspace
-    if (terminal.buffer.cursorX > 5) {
-      curr_line =
-        curr_line.slice(0, terminal.buffer.cursorX - 6) +
-        curr_line.slice(terminal.buffer.cursorX - 5);
-      pos = curr_line.length - terminal.buffer.cursorX + 6;
-      terminal.write("\33[2K\r\u001b[32mscm> \u001b[37m" + curr_line);
-      terminal.write("\033[".concat(pos.toString()).concat("D")); //term.write('\033[<N>D');
-      if (
-        terminal.buffer.cursorX == 5 ||
-        terminal.buffer.cursorX == curr_line.length + 6
-      ) {
-        terminal.write("\033[1C");
-      }
-    }
-  } else if (e.keyCode === 38) {
-    // Up arrow
-    if (entries.length > 0) {
-      if (currPos > 0) {
-        currPos -= 1;
-      }
-      curr_line = entries[currPos];
-      terminal.write("\33[2K\r\u001b[32mscm> \u001b[37m" + curr_line);
-    }
-  } else if (e.keyCode === 40) {
-    // Down arrow
-    currPos += 1;
-    if (currPos === entries.length || entries.length === 0) {
-      currPos -= 1;
-      curr_line = "";
-      terminal.write("\33[2K\r\u001b[32mscm> \u001b[37m");
-    } else {
-      curr_line = entries[currPos];
-      terminal.write("\33[2K\r\u001b[32mscm> \u001b[37m" + curr_line);
-    }
-  } else if (
-    printable &&
-    !(e.keyCode === 39 && terminal.buffer.cursorX > curr_line.length + 4)
-  ) {
-    if (e.keyCode != 37 && e.keyCode != 39) {
-      var input = e.key;
-      if (e.keyCode == 9) {
-        // Tab
-        input = "\t";
-      }
-      pos = curr_line.length - terminal.buffer.cursorX + 4;
-      curr_line = [
-        curr_line.slice(0, terminal.buffer.cursorX - 5),
-        input,
-        curr_line.slice(terminal.buffer.cursorX - 5)
-      ].join("");
-      terminal.write("\33[2K\r\u001b[32mscm> \u001b[37m" + curr_line);
-      terminal.write("\033[".concat(pos.toString()).concat("D")); //term.write('\033[<N>D');
-    } else {
-      terminal.write(key);
-    }
-  }*/
 });
-// For debugging purposes
-/* terminal.onKey((e) => {
-  console.log(e.key);
-}); */
 async function connectSerial() {
   try {
     if ("serial" in navigator) {
@@ -163,22 +88,18 @@ async function connectSerial() {
 
       if (localStorage.dtrOn == "true") settings.dataTerminalReady = true;
       if (localStorage.rtsOn == "true") settings.requestToSend = true;
-      if (Object.keys(settings).length > 0) await port.setSignals(settings);
-
-      await listenToPort();
-      textEncoder = new TextEncoderStream();
-      writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
-      writer = textEncoder.writable;
-
-      const signals = await port.getSignals();
-      console.log(`Clear To Send:       ${signals.clearToSend}`);
-      console.log(`Data Carrier Detect: ${signals.dataCarrierDetect}`);
-      console.log(`Data Set Ready:      ${signals.dataSetReady}`);
-      console.log(`Ring Indicator:      ${signals.ringIndicator}`);
-      await listenToPort();
+      if (Object.keys(settings).length > 0) {
+        await port.setSignals(settings);
+        const signals = await port.getSignals();
+        console.log(`Clear To Send:       ${signals.clearToSend}`);
+        console.log(`Data Carrier Detect: ${signals.dataCarrierDetect}`);
+        console.log(`Data Set Ready:      ${signals.dataSetReady}`);
+        console.log(`Ring Indicator:      ${signals.ringIndicator}`);
+      }
       textEncoder = new TextEncoderStream();
       writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
       writer = textEncoder.writable.getWriter();
+      await listenToPort();
     } else {
       // The Web Serial API is not supported.
       alert("The Web Serial API is not supported by your browser.");
@@ -189,26 +110,26 @@ async function connectSerial() {
 }
 async function terminalCommands(curr_line) {
   try {
-    if (curr_line.trim().startsWith("clear")) {
+    if (curr_line.trim().startsWith("/clear")) {
       terminal.clear();
     }
     if (
-      curr_line.trim().startsWith("help") ||
+      curr_line.trim().startsWith("/help") ||
       curr_line.trim().startsWith("?")
     ) {
       await showHelp();
     }
-    if (curr_line.trim().startsWith("contributors")) {
+    if (curr_line.trim().startsWith("/contributors")) {
       terminal.writeln("");
       terminal.writeln("");
       printToConsoleln(contributors, "33", true);
     }
-    if (curr_line.trim().startsWith("version")) {
+    if (curr_line.trim().startsWith("/version")) {
       terminal.writeln("");
       terminal.writeln("");
       await showVersion();
     }
-    if (curr_line.trim().startsWith("refresh")) {
+    if (curr_line.trim().startsWith("/refresh")) {
       terminal.writeln("Exiting...");
       terminal.prompt();
       terminal.writeln("Exited.");
@@ -217,10 +138,10 @@ async function terminalCommands(curr_line) {
       terminal.clear();
       window.location.reload();
     }
-    if (curr_line.trim().startsWith("connect")) {
+    if (curr_line.trim().startsWith("/connect")) {
       await connectSerial();
     }
-    if (curr_line.trim().startsWith("send")) {
+    if (curr_line.trim().startsWith("/send")) {
       let data = curr_line.split(" ");
       if (data.length > 1) {
         let str = data[1];
@@ -235,7 +156,7 @@ async function terminalCommands(curr_line) {
         }
       }
     }
-    if (curr_line.trim().startsWith("sendline")) {
+    if (curr_line.trim().startsWith("/sendline")) {
       let data = curr_line.split(" ");
       if (data.length > 1) {
         let str = data[1];
@@ -249,7 +170,7 @@ async function terminalCommands(curr_line) {
         }
       }
     }
-    if (curr_line.trim().startsWith("sendfile")) {
+    if (curr_line.trim().startsWith("/sendfile")) {
       let data = curr_line.split(" ");
       if (data.length > 1) {
         let str = data[1];
@@ -266,12 +187,12 @@ async function terminalCommands(curr_line) {
         reader.readAsText(file);
       }
     }
-    if (curr_line.trim().startsWith("neofetch")) {
+    if (curr_line.trim().startsWith("/neofetch")) {
       terminal.writeln("");
       terminal.writeln("");
       printToConsoleln(neofetch_data, 32, false);
     }
-    if (curr_line.trim().startsWith("prompt")) {
+    if (curr_line.trim().startsWith("/prompt")) {
       let data = curr_line.split(" ");
       if (data.length > 1) {
         let str = data[1];
@@ -294,29 +215,29 @@ function showVersion() {
 function showHelp() {
   terminal.writeln("");
   terminal.writeln("");
-  printToConsole("help - ", "32", false);
+  printToConsole("/help - ", "32", false);
   printToConsoleln("Show this help, you can also use `?`", "36", false);
-  printToConsole("clear - ", "32", false);
+  printToConsole("/clear - ", "32", false);
   printToConsoleln("Clear the terminal", "36", false);
-  printToConsole("contributors - ", "32", false);
+  printToConsole("/contributors - ", "32", false);
   printToConsoleln("Show the contributors", "36", false);
-  printToConsole("version - ", "32", false);
+  printToConsole("/version - ", "32", false);
   printToConsoleln("Show the version", "36", false);
-  printToConsole("refresh - ", "32", false);
+  printToConsole("/refresh - ", "32", false);
   printToConsoleln("Refresh the page", "36", false);
-  printToConsole("connect - ", "32", false);
+  printToConsole("/connect - ", "32", false);
   printToConsoleln("Connect to a serial port", "36", false);
-  printToConsole("send - ", "32", false);
+  printToConsole("/send - ", "32", false);
   printToConsoleln("Send data to the serial port", "36", false);
-  printToConsole("sendline - ", "32", false);
+  printToConsole("/sendline - ", "32", false);
   printToConsoleln(
     "Send data to the serial port and add a new line",
     "36",
     false
   );
-  printToConsole("sendfile - ", "32", false);
+  printToConsole("/sendfile - ", "32", false);
   printToConsoleln("Send a file to the serial port", "36", false);
-  printToConsole("neofetch - ", "32", false);
+  printToConsole("/neofetch - ", "32", false);
   printToConsoleln("Show the neofetch data", "36", false);
 }
 async function sendCharacterNumber() {
@@ -333,17 +254,16 @@ async function sendSerialLine() {
   if (document.getElementById("addLine").checked == true)
     dataToSend = dataToSend + "\n";
   if (document.getElementById("echoOn").checked == true)
-    if (dataToSend.trim().startsWith("clear")) terminal.clear();
+    if (dataToSend.trim().startsWith("/clear")) terminal.clear();
     else appendToAdvancedTerminal(dataToSend);
-  if (dataToSend.trim().startsWith("clear")) terminal.clear();
-  if (dataToSend.trim().startsWith("neofetch"))
+  if (dataToSend.trim().startsWith("/clear")) terminal.clear();
+  if (dataToSend.trim().startsWith("/neofetch"))
     printToConsoleln(neofetch_data, 32, false);
-  if (dataToSend.trim().startsWith("contributors"))
+  if (dataToSend.trim().startsWith("/contributors"))
     printToConsoleln(contributors, "33", true);
   await writer.write(dataToSend);
   if (dataToSend.trim().startsWith("\x03")) echo(false);
   document.getElementById("lineToSend").value = "";
-  await writer.releaseLock();
 }
 function printToConsoleln(data, color, array) {
   if (array == true) {
@@ -479,9 +399,8 @@ async function forgetPort() {
       if (localStorage.forgetDevice == "true") {
         await port.forget();
         console.log("Forgot device");
-        alert("Device forgotten");
+        alert("Device forgotten\nForget Deactivated");
         localStorage.forgetDevice = "false";
-        alert("Forget Deactivated");
       }
     } else {
       // forget() is not supported.

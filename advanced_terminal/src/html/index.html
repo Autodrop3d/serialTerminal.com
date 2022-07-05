@@ -5,6 +5,9 @@
     <link rel="stylesheet" href="../css/xterm.css" />
     <link rel="stylesheet" href="../css/style.css" />
     <script src="../js/lib/xterm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fastest Serial terminal in your browser for Chrome.</title>
     <meta name="Description" content="Set your baud speed and hit connect.
@@ -12,9 +15,9 @@
 </head>
 
 <body>
-    <button class="active" onclick="location.href='../../../settings.html'">&#9881;</button>
-    <button class="active" onclick="location.href='../../../index.html'">&#127968;</button>
-    <button onclick="connectSerial()">Connect</button>
+    <button class="active" style="color: rgb(60, 255, 1);" onclick="location.href='../../../settings.html'">&#9881;</button>
+    <button class="active" style="color: rgb(60, 255, 1);" onclick="location.href='../../../index.html'">&#127968;</button>
+    <button style="color: rgb(60, 255, 1);" onclick="connectSerial()">Connect</button>
     Baud:
     <input type="text" id="baud" list="baudList" style="width: 10ch;" onclick="this.value = ''"
         onchange="localStorage.baud = this.value">
@@ -34,13 +37,13 @@
         <option value="128000">128000</option>
         <option value="256000">256000</option>
     </datalist>
-    <!-- <button onclick="serialResultsDiv.innerHTML = '';">Clear</button> -->
-    <button onclick="advancedTerminalClear()">Clear</button>
+
+    <button style="color: rgb(60, 255, 1);" onclick="advancedTerminalClear()">Clear</button>
 
     <br>
     <input type="text" id="lineToSend" style="width:calc(100% - 165px)">
-    <button onclick="sendSerialLine()" style="width:45px">Send</button>
-    <button onclick="sendCharacterNumber()" style="width:100px">Send Char</button>
+    <button style="color: rgb(60, 255, 1);" onclick="sendSerialLine()" style="width:45px">Send</button>
+    <button style="color: rgb(60, 255, 1);" onclick="sendCharacterNumber()" style="width:100px">Send Char</button>
     <br>
 
     <label for="carriageReturn">
@@ -54,7 +57,8 @@
     </label>
 
     <label for="serialOnlyState">
-        <input type="checkbox" id="serialOnlyState" onclick="localStorage.serialOnlyState = this.checked;" unchecked>Send Commands Only to Serial
+        <input type="checkbox" id="serialOnlyState" onclick="localStorage.serialOnlyState = this.checked;"
+            unchecked>Send Commands Only to Serial
     </label>
 
     <label for="echoOn">

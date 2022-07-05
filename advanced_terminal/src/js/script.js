@@ -215,10 +215,6 @@ async function terminalCommands(curr_line) {
       terminal.prompt();
       terminal.writeln("");
       terminal.clear();
-      if (port) {
-        await port.releaseLock();
-        await port.close();
-      }
       window.location.reload();
     }
     if (curr_line.trim().startsWith("connect")) {
@@ -377,7 +373,6 @@ async function listenToPort() {
         const { value, done } = await reader.read();
         if (done) {
           // Allow the serial port to be closed later.
-          readableStreamClosed.then(() => port.readable.close());
           console.log("[readLoop] DONE", done);
           reader.releaseLock();
           break;
@@ -385,20 +380,6 @@ async function listenToPort() {
         // value is a string.
         appendToAdvancedTerminal(value);
       }
-
-      const textEncoder = new TextEncoderStream();
-      const writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
-
-      reader.cancel();
-      await readableStreamClosed.catch(() => {
-        /* Ignore the error */
-      });
-
-      writer.close();
-      await writableStreamClosed;
-      
-      await port.releaseLock();
-      await port.close();
     } catch (error) {
       //! TODO: Handle non-fatal read error.
       console.log("[readLoop] ERROR", error);

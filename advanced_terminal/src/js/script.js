@@ -216,7 +216,6 @@ async function terminalCommands(curr_line) {
       terminal.writeln("");
       terminal.clear();
       if (port) {
-        await port.releaseLock();
         await port.close();
       }
       window.location.reload();
@@ -375,6 +374,9 @@ async function listenToPort() {
     try {
       while (true) {
         const { value, done } = await reader.read();
+        if (value) {
+          //log.textContent += value + "\n";
+        }
         if (done) {
           // Allow the serial port to be closed later.
           readableStreamClosed.then(() => port.readable.close());
@@ -396,8 +398,7 @@ async function listenToPort() {
 
       writer.close();
       await writableStreamClosed;
-      
-      await port.releaseLock();
+
       await port.close();
     } catch (error) {
       //! TODO: Handle non-fatal read error.

@@ -160,11 +160,16 @@ async function connectSerial() {
       port = await navigator.serial.requestPort();
       await port.open({ baudRate: document.getElementById("baud").value });
       let settings = {};
-      if (document.getElementById("rtsOn").value == true)
-        settings.dataTerminalReady = true;
-      if (document.getElementById("dtrOn").value == true)
-        settings.requestToSend = true;
-      if (settings !== {}) await port.setSignals(settings);
+
+      if (localStorage.dtrOn == "true") settings.dataTerminalReady = true;
+      if (localStorage.rtsOn == "true") settings.requestToSend = true;
+      if (Object.keys(settings).length > 0) await port.setSignals(settings);
+
+      await listenToPort();
+      textEncoder = new TextEncoderStream();
+      writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
+      writer = textEncoder.writable;
+
       const signals = await port.getSignals();
       console.log(`Clear To Send:       ${signals.clearToSend}`);
       console.log(`Data Carrier Detect: ${signals.dataCarrierDetect}`);
@@ -178,8 +183,8 @@ async function connectSerial() {
       // The Web Serial API is not supported.
       alert("The Web Serial API is not supported by your browser.");
     }
-  } catch {
-    alert("Serial Connection Failed");
+  } catch (e) {
+    alert("Serial Connection Failed" + e);
   }
 }
 async function terminalCommands(curr_line) {

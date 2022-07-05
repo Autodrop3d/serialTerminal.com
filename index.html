@@ -121,8 +121,6 @@ Baud:
         await writer.write(dataToSend);
         if (dataToSend.trim().startsWith('\x03')) echo(false);
         document.getElementById("lineToSend").value = "";
-        
-        
         document.getElementById("lineToSend").value = "";
     }
     async function listenToPort() {
@@ -135,7 +133,6 @@ Baud:
             const { value, done } = await reader.read();
             if (done) {
                 // Allow the serial port to be closed later.
-                readableStreamClosed.then(() => port.readable.close());
                 console.log('[readLoop] DONE', done);
                 reader.releaseLock();
                 break;

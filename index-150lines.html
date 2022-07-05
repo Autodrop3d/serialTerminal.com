@@ -73,10 +73,8 @@ Baud:
 <br>
 <div id="serialResults">
 </div>
-
 <script>
     var port, textEncoder, writableStreamClosed, writer;
-
     async function connectSerial() {
         try {
             // Prompt user to select any serial port.
@@ -92,40 +90,38 @@ Baud:
             alert("Serial Connection Failed");
         }
     }
-
     async function sendCharacterNumber() {
         document.getElementById("lineToSend").value = String.fromCharCode(document.getElementById("lineToSend").value);
     }
-
     async function sendSerialLine() {
         dataToSend = document.getElementById("lineToSend").value;
         if (document.getElementById("addLine").checked == true) dataToSend = dataToSend + "\r\n";
         if (document.getElementById("echoOn").checked == true) appendToTerminal("> " + dataToSend);
-        await writer.write(dataToSend);
+        if (port) {
+            await writer.write(dataToSend);
+        }
         document.getElementById("lineToSend").value = "";
-        //await writer.releaseLock();
+        if (port) {
+            await writer.releaseLock();
+        }
     }
-
     async function listenToPort() {
         const textDecoder = new TextDecoderStream();
         const readableStreamClosed = port.readable.pipeTo(textDecoder.writable);
         const reader = textDecoder.readable.getReader();
-
         // Listen to data coming from the serial device.
         while (true) {
             const { value, done } = await reader.read();
             if (done) {
                 // Allow the serial port to be closed later.
-                //reader.releaseLock();
+                reader.releaseLock();
                 break;
             }
             // value is a string.
             appendToTerminal(value);
         }
     }
-
     const serialResultsDiv = document.getElementById("serialResults");
-
     async function appendToTerminal(newStuff) {
         serialResultsDiv.innerHTML += newStuff;
         if (serialResultsDiv.innerHTML.length > 3000) serialResultsDiv.innerHTML = serialResultsDiv.innerHTML.slice(serialResultsDiv.innerHTML.length - 3000);
@@ -133,17 +129,14 @@ Baud:
         //scroll down to bottom of div
         serialResultsDiv.scrollTop = serialResultsDiv.scrollHeight;
     }
-
     document.getElementById("lineToSend").addEventListener("keyup", async function (event) {
         if (event.keyCode === 13) {
             sendSerialLine();
         }
     })
-
     document.getElementById("baud").value = (localStorage.baud == undefined ? 9600 : localStorage.baud);
     document.getElementById("addLine").checked = (localStorage.addLine == "false" ? false : true);
     document.getElementById("echoOn").checked = (localStorage.echoOn == "false" ? false : true);
-
 </script>
 <br> © 2021 Mike Molinari (mmiscool) Source <a
     href="https://github.com/mmiscool/serialTerminal.com">https://github.com/mmiscool/serialTerminal.com</a>

@@ -39,7 +39,7 @@ terminal.prompt = () => {
   if (localStorage.prompt > 0) {
     terminal.write(`\r\n\x1B[1;3;32m${termPrompt}\x1B[0m`);
   } else {
-    terminal.write("\r\n\x1B[0;3;34m$ \x1B[0m ");
+    terminal.write("\r\n\x1B[0;3;34m $ \x1B[0m ");
   }
 };
 terminal.writeln("Welcome to the Advanced Browser-based Cereal Terminal.");
@@ -102,111 +102,73 @@ async function connectSerial() {
       await listenToPort();
     } else {
       // The Web Serial API is not supported.
-      alert("The Web Serial API is not supported by your browser.");
+      if (
+        window.confirm(
+          "The Web Serial API is not supported by your browser. Please use a better one. Do you want to continue?"
+        )
+      )
+        window.open("https://www.google.com/chrome/", "_blank");
     }
   } catch (e) {
     alert("Serial Connection Failed" + e);
   }
 }
 async function terminalCommands(curr_line) {
-  try {
-    if (curr_line.trim().startsWith("/clear")) {
-      terminal.clear();
-    }
-    if (
-      curr_line.trim().startsWith("/help") ||
-      curr_line.trim().startsWith("?")
-    ) {
-      await showHelp();
-    }
-    if (curr_line.trim().startsWith("/contributors")) {
-      terminal.writeln("");
-      terminal.writeln("");
-      printToConsoleln(contributors, "33", true);
-    }
-    if (curr_line.trim().startsWith("/version")) {
-      terminal.writeln("");
-      terminal.writeln("");
-      await showVersion();
-    }
-    if (curr_line.trim().startsWith("/refresh")) {
-      terminal.writeln("Exiting...");
-      terminal.prompt();
-      terminal.writeln("Exited.");
-      terminal.prompt();
-      terminal.writeln("");
-      terminal.clear();
-      window.location.reload();
-    }
-    if (curr_line.trim().startsWith("/connect")) {
-      await connectSerial();
-    }
-    if (curr_line.trim().startsWith("/send")) {
-      let data = curr_line.split(" ");
-      if (data.length > 1) {
-        let str = data[1];
-        //remove the send command
-        str = str.substring(0);
-        for (let i = 2; i < data.length; i++) {
-          str += " " + data[i];
-        }
-        console.log(str);
-        if (port) {
-          writer.write(str);
-        }
+  if (localStorage.serialOnlyState == "true") {
+    sendCMD(curr_line);
+  } else {
+    try {
+      if (curr_line.trim().startsWith("/clear")) {
+        if (document.getElementById("echoOn").checked == true) terminal.clear();
       }
-    }
-    if (curr_line.trim().startsWith("/sendline")) {
-      let data = curr_line.split(" ");
-      if (data.length > 1) {
-        let str = data[1];
-        str = str.substring(0);
-        for (let i = 2; i < data.length; i++) {
-          str += " " + data[i];
-        }
-        console.log(str);
-        if (port) {
-          writer.write(str + "\n");
-        }
+      if (
+        curr_line.trim().startsWith("/help") ||
+        curr_line.trim().startsWith("?")
+      ) {
+        await showHelp();
       }
-    }
-    if (curr_line.trim().startsWith("/sendfile")) {
-      let data = curr_line.split(" ");
-      if (data.length > 1) {
-        let str = data[1];
-        for (let i = 2; i < data.length; i++) {
-          str += " " + data[i];
-        }
-        let file = new File([str], str, { type: "text/plain" });
-        let reader = new FileReader();
-        reader.onload = function () {
-          if (port) {
-            writer.write(reader.result);
-          }
-        };
-        reader.readAsText(file);
+      if (curr_line.trim().startsWith("/contributors")) {
+        terminal.writeln("");
+        terminal.writeln("");
+        printToConsoleln(contributors, "33", true);
       }
-    }
-    if (curr_line.trim().startsWith("/neofetch")) {
-      terminal.writeln("");
-      terminal.writeln("");
-      printToConsoleln(neofetch_data, 32, false);
-    }
-    if (curr_line.trim().startsWith("/prompt")) {
-      let data = curr_line.split(" ");
-      if (data.length > 1) {
-        let str = data[1];
-        str = str.substring(0);
-        for (let i = 2; i < data.length; i++) {
-          str += " " + data[i];
-        }
-        console.log(str);
-        localStorage.setItem("prompt", str);
+      if (curr_line.trim().startsWith("/version")) {
+        terminal.writeln("");
+        terminal.writeln("");
+        await showVersion();
+      }
+      if (curr_line.trim().startsWith("/refresh")) {
+        terminal.writeln("Exiting...");
+        terminal.prompt();
+        terminal.writeln("Exited.");
+        terminal.prompt();
+        terminal.writeln("");
+        terminal.clear();
         window.location.reload();
       }
+      if (curr_line.trim().startsWith("/connect")) {
+        await connectSerial();
+      }
+      if (curr_line.trim().startsWith("/send")) {
+        sendCMD(curr_line);
+      }
+      if (curr_line.trim().startsWith("/sendline")) {
+        sendCMD(curr_line, true);
+      }
+      if (curr_line.trim().startsWith("/sendfile")) {
+        sendFile();
+      }
+      if (curr_line.trim().startsWith("/neofetch")) {
+        terminal.writeln("");
+        terminal.writeln("");
+        printToConsoleln(neofetch_data, 32, false);
+      }
+      if (curr_line.trim().startsWith("/prompt")) {
+        setPrompt(curr_line);
+      }
+    } catch (err) {
+      console.log(err);
     }
-  } catch (err) {
-    console.log(err);
   }
 }
 function showVersion() {
@@ -261,9 +223,68 @@ async function sendSerialLine() {
     printToConsoleln(neofetch_data, 32, false);
   if (dataToSend.trim().startsWith("/contributors"))
     printToConsoleln(contributors, "33", true);
-  await writer.write(dataToSend);
+  if (dataToSend.trim().startsWith("/version")) showVersion();
+  if (dataToSend.trim().startsWith("/refresh")) window.location.reload();
+  if (dataToSend.trim().startsWith("/connect")) await connectSerial();
+  if (dataToSend.trim().startsWith("/send")) sendCMD(dataToSend);
+  if (dataToSend.trim().startsWith("/sendline")) sendCMD(dataToSend, true);
+  if (dataToSend.trim().startsWith("/sendfile")) sendFile(dataToSend);
+  if (dataToSend.trim().startsWith("/prompt")) setPrompt(dataToSend);
+  if (dataToSend.trim().startsWith("/help")) showHelp();
+  if (dataToSend.trim().startsWith("/")) {
+    printToConsoleln("Unknown command", "31", false);
+  }
   if (dataToSend.trim().startsWith("\x03")) echo(false);
+  if (port) {
+    await writer.write(dataToSend);
+  }
   document.getElementById("lineToSend").value = "";
+}
+function setPrompt(data) {
+  let data_split = data.split(" ");
+  if (data_split.length > 1) {
+    let str = data_split[1];
+    str = str.substring(0);
+    for (let i = 2; i < data_split.length; i++) {
+      str += " " + data_split[i];
+    }
+    localStorage.setItem("prompt", str);
+    window.location.reload();
+  }
+}
+function sendFile(data) {
+  let data_split = data.split(" ");
+  if (data_split.length > 1) {
+    let str = data_split[1];
+    str = str.substring(0);
+    for (let i = 2; i < data_split.length; i++) {
+      str += " " + data_split[i];
+    }
+    let file = new File([str], str, { type: "text/plain" });
+    let reader = new FileReader();
+    reader.onload = function () {
+      if (port) {
+        writer.write(reader.result);
+      }
+    };
+    reader.readAsText(file);
+  }
+}
+function sendCMD(data, newLine = false) {
+  let data_split = data.split(" ");
+  if (data_split.length > 1) {
+    let str = data_split[1];
+    str = str.substring(0);
+    for (let i = 2; i < data_split.length; i++) {
+      str += " " + data_split[i];
+    }
+    if (newLine) {
+      str += "\n";
+    }
+    if (port) {
+      writer.write(str);
+    }
+  }
 }
 function printToConsoleln(data, color, array) {
   if (array == true) {
@@ -422,6 +443,8 @@ document.getElementById("baud").value =
   localStorage.baud == undefined ? 9600 : localStorage.baud;
 document.getElementById("addLine").checked =
   localStorage.addLine == "false" ? false : true;
+document.getElementById("serialOnlyState").checked =
+  localStorage.serialOnlyState == "true" ? true : false;
 document.getElementById("carriageReturn").checked =
   localStorage.carriageReturn == "false" ? false : true;
 document.getElementById("echoOn").checked =

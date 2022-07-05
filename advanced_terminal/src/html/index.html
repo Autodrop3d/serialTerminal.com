@@ -17,7 +17,7 @@
 <body>
     <button class="active" style="color: rgb(60, 255, 1);" onclick="location.href='../../../settings.html'">&#9881;</button>
     <button class="active" style="color: rgb(60, 255, 1);" onclick="location.href='../../../index.html'">&#127968;</button>
-    <button onclick="connectSerial()">Connect</button>
+    <button style="color: rgb(60, 255, 1);" onclick="connectSerial()">Connect</button>
     Baud:
     <input type="text" id="baud" list="baudList" style="width: 10ch;" onclick="this.value = ''"
         onchange="localStorage.baud = this.value">
@@ -37,13 +37,13 @@
         <option value="128000">128000</option>
         <option value="256000">256000</option>
     </datalist>
-    <!-- <button onclick="serialResultsDiv.innerHTML = '';">Clear</button> -->
-    <button onclick="advancedTerminalClear()">Clear</button>
+
+    <button style="color: rgb(60, 255, 1);" onclick="advancedTerminalClear()">Clear</button>
 
     <br>
     <input type="text" id="lineToSend" style="width:calc(100% - 165px)">
-    <button onclick="sendSerialLine()" style="width:45px">Send</button>
-    <button onclick="sendCharacterNumber()" style="width:100px">Send Char</button>
+    <button style="color: rgb(60, 255, 1);" onclick="sendSerialLine()" style="width:45px">Send</button>
+    <button style="color: rgb(60, 255, 1);" onclick="sendCharacterNumber()" style="width:100px">Send Char</button>
     <br>
 
     <label for="carriageReturn">

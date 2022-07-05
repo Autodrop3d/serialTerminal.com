@@ -375,7 +375,7 @@ async function listenToPort() {
       while (true) {
         const { value, done } = await reader.read();
         if (value) {
-          log.textContent += value + "\n";
+          //log.textContent += value + "\n";
         }
         if (done) {
           // Allow the serial port to be closed later.

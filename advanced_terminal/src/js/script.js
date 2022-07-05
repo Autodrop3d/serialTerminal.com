@@ -255,7 +255,7 @@ async function sendSerialLine() {
     dataToSend = dataToSend + "\n";
   if (document.getElementById("echoOn").checked == true)
     if (dataToSend.trim().startsWith("/clear")) terminal.clear();
-    else appendToAdvancedTerminal(dataToSend);
+    else printToConsole(dataToSend, "36", false);
   if (dataToSend.trim().startsWith("/clear")) terminal.clear();
   if (dataToSend.trim().startsWith("/neofetch"))
     printToConsoleln(neofetch_data, 32, false);
@@ -301,7 +301,7 @@ async function listenToPort() {
           break;
         }
         // value is a string.
-        appendToAdvancedTerminal(value);
+        printToConsole(value, 36, false);
       }
     } catch (error) {
       //! TODO: Handle non-fatal read error.

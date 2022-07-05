@@ -102,7 +102,7 @@ Baud:
             await listenToPort();
             textEncoder = new TextEncoderStream();
             writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
-            writer = textEncoder.writable;
+            writer = textEncoder.writable.getWriter();;
         } catch (e){
             alert("Serial Connection Failed" + e);
         }
@@ -118,11 +118,6 @@ Baud:
         if (document.getElementById("addLine").checked == true) dataToSend = dataToSend + "\n";
         if (document.getElementById("echoOn").checked == true) appendToTerminal("> " + dataToSend);
         if (dataToSend.trim().startsWith('\x03')) echo(false);
-        const _writer = writer.getWriter();
-        lines.forEach((dataTosSend) => {
-            console.log('[SEND] ' + dataToSend);
-            _writer.write(dataToSend);
-        });
         document.getElementById("lineToSend").value = "";
         await writer.releaseLock();
     }
@@ -134,9 +129,6 @@ Baud:
         // Listen to data coming from the serial device.
         while (true) {
             const { value, done } = await reader.read();
-            if (value) {
-                log.textContent += value + '\n';
-            }
             if (done) {
                 // Allow the serial port to be closed later.
                 readableStreamClosed.then(() => port.readable.close());

@@ -6,7 +6,6 @@ body {
   background-color: var(--form-background-color);
   font-family: monospace;
   color: rgb(60, 255, 1);
-  padding: 0px;
 }
 
 button,

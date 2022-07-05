@@ -509,6 +509,16 @@ document.getElementById("carriageReturn").checked =
   localStorage.carriageReturn == "false" ? false : true;
 document.getElementById("echoOn").checked =
   localStorage.echoOn == "false" ? false : true;
+var portSettings = {
+  bufferSize: "0",
+  parity: "none",
+  dataBits: "0",
+  stopBits: "0",
+  flowControl: "none"
+};
+
+localStorage.setItem("portSettings", JSON.stringify(portSettings));
+
 window.onload = async function () {
   await forgetPort();
 };

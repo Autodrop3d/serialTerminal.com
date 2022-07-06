@@ -17,11 +17,7 @@
         border: 1px solid;
         border-color: #696 #363 #363 #696;
     }
-
-    [type="checkbox"] {
-        vertical-align: middle;
-    }
-
+    
     #serialResults {
         font-family: monospace;
         white-space: pre;
@@ -32,6 +28,10 @@
         background-color: rgb(88, 92, 92);
         padding: 10px;
         margin: 0px;
+    }
+
+    [type="checkbox"] {
+        vertical-align: middle;
     }
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -98,8 +98,6 @@ Baud:
             if (localStorage.dtrOn == "true") settings.dataTerminalReady = true;
             if (localStorage.rtsOn == "true") settings.requestToSend = true;
             if (Object.keys(settings).length > 0) await port.setSignals(settings);
-  
-            
             textEncoder = new TextEncoderStream();
             writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
             writer = textEncoder.writable.getWriter();

@@ -17,7 +17,7 @@
         border: 1px solid;
         border-color: #696 #363 #363 #696;
     }
-
+    
     #serialResults {
         font-family: monospace;
         white-space: pre;
@@ -29,17 +29,18 @@
         padding: 10px;
         margin: 0px;
     }
+
+    [type="checkbox"] {
+        vertical-align: middle;
+    }
 </style>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Fastest Serial terminal in your browser for Chrome.</title>
 <meta name="Description" content="Set your baud speed and hit connect.
-     A serial terminal that runs with out any plugins in chrome.">
-<button class="active" style="color: rgb(60, 255, 1);" onclick="location.href='settings.html'">&#9881;</button>
-<button class="active" style="color: rgb(60, 255, 1);"
-    onclick="location.href='advanced_terminal/src/html/index.html'">&#128435;</button>
-<button style="color: rgb(60, 255, 1);" onclick="connectSerial()">Connect</button>
+ A serial terminal that runs with out any plugins in chrome.">
+<button class="active" onclick="location.href='settings.html'">&#9881;</button>
+<button class="active" onclick="location.href='advanced_terminal/src/html/index.html'">&#128435;</button>
+<button onclick="connectSerial()">Connect</button>
 Baud:
 <input type="text" id="baud" list="baudList" style="width: 10ch;" onclick="this.value = ''"
     onchange="localStorage.baud = this.value">
@@ -59,17 +60,16 @@ Baud:
     <option value="128000">128000</option>
     <option value="256000">256000</option>
 </datalist>
-<button style="color: rgb(60, 255, 1);" onclick="serialResultsDiv.innerHTML = '';">Clear</button>
+<button onclick="serialResultsDiv.innerHTML = '';">Clear</button>
 
 <br>
 <input type="text" id="lineToSend" style="width:calc(100% - 165px)">
-<button style="color: rgb(60, 255, 1);" onclick="sendSerialLine()" style="width:45px">Send</button>
-<button style="color: rgb(60, 255, 1);" onclick="sendCharacterNumber()" style="width:100px">Send Char</button>
+<button onclick="sendSerialLine()" style="width:45px">Send</button>
+<button onclick="sendCharacterNumber()" style="width:100px">Send Char</button>
 <br>
 
 <label for="carriageReturn">
-    <input type="checkbox" id="carriageReturn" onclick="localStorage.carriageReturn = this.checked;" checked>send
-    with
+    <input type="checkbox" id="carriageReturn" onclick="localStorage.carriageReturn = this.checked;" checked>send with
     /r
 </label>
 
@@ -85,9 +85,6 @@ Baud:
 <br>
 <div id="serialResults">
 </div>
-
-<br> © 2021 Autodrop3d Source <a
-    href="https://github.com/autodrop3d/serialTerminal.com">https://github.com/autodrop3d/serialTerminal.com</a>
 <script>
     var port, textEncoder, writableStreamClosed, writer, historyIndex = -1;
     const lineHistory = [];
@@ -101,13 +98,11 @@ Baud:
             if (localStorage.dtrOn == "true") settings.dataTerminalReady = true;
             if (localStorage.rtsOn == "true") settings.requestToSend = true;
             if (Object.keys(settings).length > 0) await port.setSignals(settings);
-
-
             textEncoder = new TextEncoderStream();
             writableStreamClosed = textEncoder.readable.pipeTo(port.writable);
             writer = textEncoder.writable.getWriter();
             await listenToPort();
-        } catch (e) {
+        } catch (e){
             alert("Serial Connection Failed" + e);
         }
     }
@@ -174,4 +169,6 @@ Baud:
     document.getElementById("addLine").checked = (localStorage.addLine == "false" ? false : true);
     document.getElementById("carriageReturn").checked = (localStorage.carriageReturn == "false" ? false : true);
     document.getElementById("echoOn").checked = (localStorage.echoOn == "false" ? false : true);
-</script>F
+</script>
+<br> © 2021 Autodrop3d Source <a
+    href="https://github.com/autodrop3d/serialTerminal.com">https://github.com/autodrop3d/serialTerminal.com</a>

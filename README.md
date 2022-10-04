@@ -1,10 +1,10 @@
 <div align="center">
 
-# **SerialTerminal.com**
-
 <img src="https://user-images.githubusercontent.com/6439772/111710838-dd6a6300-8820-11eb-9083-88e0c25d104e.png">
 
-> CerialTerminal bowl logo courtesy of https://github.com/drewgates
+> CerealTerminal bowl logo courtesy of https://github.com/drewgates
+
+# **SerialTerminal.com**
 
 ![final_60541f2f1fafbe0034b26f70_139554](https://user-images.githubusercontent.com/6439772/111729189-e66d2b80-8844-11eb-9b7b-94de67df4338.gif)
 

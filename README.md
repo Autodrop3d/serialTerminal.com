@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://user-images.githubusercontent.com/6439772/111710838-dd6a6300-8820-11eb-9083-88e0c25d104e.png">
+![Cereal Logo](https://user-images.githubusercontent.com/6439772/111710838-dd6a6300-8820-11eb-9083-88e0c25d104e.png)
 
 > CerealTerminal bowl logo courtesy of https://github.com/drewgates
 
@@ -21,6 +21,7 @@ The index.html file contains a bare bones serial terminal with fewer than 150 li
 A live version of the serial terminal can be accesed at (https://www.serialterminal.com). Feel free to use it at your pleasure. 
 
 **Instructions for use**:
+
 1) Load https://www.serialterminal.com
 2) Set baud speed from drop down.
 3) click connect.

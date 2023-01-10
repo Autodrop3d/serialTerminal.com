@@ -31,7 +31,7 @@ input[type=text] {
 
 .flex-container {
     display: flex;
-    height: calc(100% - 120px);
+    height: calc(100% - 100px);
 }
 
 .flex-child {

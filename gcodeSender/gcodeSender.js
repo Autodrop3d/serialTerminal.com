@@ -168,7 +168,7 @@ async function sendNextLine() {
             await setPrintingStatus("COMPLETED");
             return
         }
-
+        Jump(currentGcodeLine);
         lineToSend = gcodeLines[currentGcodeLine].trim();
 
         if (lineToSend.startsWith(";") | lineToSend == "") {
@@ -182,7 +182,7 @@ async function sendNextLine() {
     appendToTerminal("Sending #" + currentGcodeLine + "> " + lineToSend + "\r\n");
 
     await writer.write(lineToSend + "\r\n");
-    Jump(currentGcodeLine);
+    
 
 }
 
